@@ -5,5 +5,6 @@ Orbital Mechanics Toolbox - a set of functions used for various aspects includin
 ## Prerequisites
 
 - [Python](https://www.python.org/downloads/)
-- Extra packages -  [Numpy](http://www.numpy.org/)
-                  [Matplotlib](http://matplotlib.org/)
+- Extra packages 
+  - [Numpy](http://www.numpy.org/)
+  - [Matplotlib](http://matplotlib.org/)
