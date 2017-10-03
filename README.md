@@ -1,6 +1,6 @@
-## Project Title
+## Orbital Mechanics Toolbox
 
-Orbital Mechanics Toolbox - a set of functions used for various aspects including orbit determination from inital orbital state vectors of an orbiting body, such as a satellite, as well as the determination of state vectors from orbital elements. Keplerian motion is used for these purposes. 
+A set of functions used for various aspects including orbit determination from inital orbital state vectors of an orbiting body, such as a satellite, as well as the determination of state vectors from orbital elements. Keplerian motion is used for these purposes. 
 
 ## Prerequisites
 
