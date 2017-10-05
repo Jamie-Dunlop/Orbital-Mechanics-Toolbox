@@ -69,7 +69,19 @@ def orb_elems(r, v, mu):
 
     return
 
-orb_elems([4.1852e7, 6.2778e7, 10.463e7], [2.5936e4, 5.1872e4, 0], 1.40812)
+    def vectors(Vel, height, gamma):
+         v_tang = Vel * math.sin(gamma)
+         v_rad = Vel * math.cos(gamma)
+         r_x = height * math.cos(115)
+         r_y = height * math.sin(115)
+
+         return #(v_tang, v_rad, r_x, r_y)
+#Vel = 7605
+#gamma = 0.45
+#height = 495
+
+vectors(7605, 495, 0.45)
+orb_elems([r_x, r_y, 0], [v_tang, v_rad, 0], 3.986004e14)
 # r = [4.1852e7, 6.2778e7, 10.463e7]
 # v = [2.5936e4, 5.1872e4, 0]
 # mu = 1.40812
