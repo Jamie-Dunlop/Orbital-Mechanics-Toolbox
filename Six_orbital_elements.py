@@ -37,13 +37,11 @@ def orb_elems(r, v, mu):
     n = np.array((cross(k, H)))/mod(cross(k, H))
 
     #Right ascension of the ascending node
-    RAAN =math.acos(n[0]/mod(n))
-
-    RAAN2 = math.atan((H[0] / mod(H)) / -(-H[1] / mod(H)))
+    RAAN = math.atan((H[0] / mod(H)) / -(-H[1] / mod(H))) * 180 / math.pi
 
 
     #Inclination
-    i = math.acos((dot(k, H))/mod(H))
+    i = (math.acos((dot(k, H))/mod(H))) * 180 / math.pi
 
     #Argument of perigee
     omega = math.acos((dot(n, e_v))/mod(e_v))
@@ -55,17 +53,16 @@ def orb_elems(r, v, mu):
     if dot(r, v) < 0:
        V = 2 * math.pi - V
 
-    print(epsilon)
-    print(H)
+    print("Orbit energy: ", epsilon)
+    print("Angular Momentum vector: ", H)
     print()
     print()
-    print(a)
-    print(e)
-    print(i)
-    print(omega)
-    print(V)
-    print(RAAN)
-    print(RAAN2)
+    print("Semi-major axis: ", a)
+    print("Eccenticity: ", e)
+    print("Inclination: ", i, "deg")
+    print("Argument of the perigee: ", omega * 180 / math.pi, "deg")
+    print("True anomaly: ", V * 180 / math.pi, "deg")
+    print("RAAN: ", RAAN, "deg")
 
     return
 
