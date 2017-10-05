@@ -39,6 +39,9 @@ def orb_elems(r, v, mu):
     #Right ascension of the ascending node
     RAAN =math.acos(n[0]/mod(n))
 
+    RAAN2 = math.atan((H[0] / mod(H)) / -(-H[1] / mod(H)))
+
+
     #Inclination
     i = math.acos((dot(k, H))/mod(H))
 
@@ -62,6 +65,7 @@ def orb_elems(r, v, mu):
     print(omega)
     print(V)
     print(RAAN)
+    print(RAAN2)
 
     return
 
