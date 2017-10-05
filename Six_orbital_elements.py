@@ -51,9 +51,9 @@ def orb_elems(r, v, mu):
         omega = 2 * math.pi - omega
 
     #True anomaly
-    V = math.acos((dot(e_v, r))/(e * mod(r)))
-    if dot(r, v) < 0:
-        V = 2 * math.pi - V
+    #V = math.acos((dot(e_v, r))/(e * mod(r)))
+    #if dot(r, v) < 0:
+    #    V = 2 * math.pi - V
 
     print(epsilon)
     print(H)
@@ -63,7 +63,7 @@ def orb_elems(r, v, mu):
     print(e)
     print(i)
     print(omega)
-    print(V)
+    #print(V)
     print(RAAN)
     print(RAAN2)
 
@@ -90,7 +90,7 @@ height = 495
 vectors(Vel, height, gamma)
 
 
-orb_elems([r_x, r_y, 0], [v_tan, v_rad, 0], 3.986004e14)
+orb_elems([2.51233271e-3, 7.25848374e-5, -1.405667119e-4], [-4.89862055e-5, 6.0212167315e-4, -4.05058737e-5], 3.986004e14)
 # r = [4.1852e7, 6.2778e7, 10.463e7]
 # v = [2.5936e4, 5.1872e4, 0]
 # mu = 1.40812
