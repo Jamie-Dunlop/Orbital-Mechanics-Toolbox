@@ -53,16 +53,16 @@ def orb_elems(r, v, mu):
     if dot(r, v) < 0:
        V = 2 * math.pi - V
 
-    print("Orbit energy: ", epsilon)
+    print("Orbit energy: ", round(epsilon, 4))
     print("Angular Momentum vector: ", H)
     print()
     print()
-    print("Semi-major axis: ", a)
-    print("Eccenticity: ", e)
-    print("Inclination: ", i, "deg")
-    print("Argument of the perigee: ", omega * 180 / math.pi, "deg")
-    print("True anomaly: ", V * 180 / math.pi, "deg")
-    print("RAAN: ", RAAN, "deg")
+    print("Semi-major axis: ", round(a, 4), "km")
+    print("Eccenticity: ", round(e, 4))
+    print("Inclination: ", round(i, 4), "deg")
+    print("Argument of the perigee: ",round(omega * 180 / math.pi, 4), "deg")
+    print("True anomaly: ", round(V * 180 / math.pi, 4) , "deg")
+    print("RAAN: ", round(RAAN, 4), "deg")
 
     return
 
@@ -87,7 +87,7 @@ height = 495
 v_tan, v_rad, r_x, r_y = vectors(Vel, height, gamma)
 
 #orb_elems([r_x, r_y, -1.405667119e-4], [v_tan, v_rad, -4.05058737e-5], 3.986004e14)
-orb_elems([0, -7000, -14000], [2, 1, -0.5], 398600) #Molniya orbit 
+orb_elems([-10515.45, -5235.37, 49.17], [-2.10305, -4.18146, -5.563290], 398600) #Molniya orbit
 # r = [4.1852e7, 6.2778e7, 10.463e7]
 # v = [2.5936e4, 5.1872e4, 0]
 # mu = 1.40812
