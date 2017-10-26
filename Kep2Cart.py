@@ -7,6 +7,11 @@
 #def kepler(ecc, M):
 import math
 import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
 def rad(X):
     return ((X * math.pi) / 180)
 
@@ -27,7 +32,7 @@ etol = 1e-8
 T = math.pi * 2 * math.sqrt(a**3/mu)
 print ("period", T, "secs")
 t = 0
-step = 1
+step = 10000
 try:
     while t <= T:
 
@@ -85,3 +90,22 @@ try:
         print(t)
 except KeyboardInterrupt:
     print('interrupted!')
+
+
+#fig = plt.figure()
+#ax = Axes3D(fig)
+#X_AXIS = np.arange(-1000000000, 1000000000, 10000000)
+#Y_AXIS = np.arange(-1000000000, 1000000000, 10000000)
+#Axes3D.autoscale_view(tight=None, scalex=True, scaley=True)
+#ax.plot(r_comp[0], r_comp[1])
+#plt.show()
+
+ax = fig.gca(projection='3d')
+x = (-20, 20, 1)
+y = (-20, 20, 1)
+z = (-20, 20, 1)
+
+ax.plot(x, y, z, label='Orbit Path')
+ax.legend()
+
+plt.show()
