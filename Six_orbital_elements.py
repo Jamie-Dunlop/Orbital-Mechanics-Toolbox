@@ -38,7 +38,8 @@ def orb_elems(r, v, mu):
 
     #Right ascension of the ascending node
     RAAN = math.atan((H[0] / mod(H)) / -(-H[1] / mod(H))) * 180 / math.pi
-
+    if -(-H[1] / mod(H)) < 0:
+        RAAN = 360 - RAAN
 
     #Inclination
     i = (math.acos((dot(k, H))/mod(H))) * 180 / math.pi
@@ -60,7 +61,7 @@ def orb_elems(r, v, mu):
     print("Orbit energy: ", round(epsilon, 4))
     print("Angular Momentum vector: ", H)
     print("Omega_2", u - V * (180 / math.pi))
-    print(u * (180 / math.pi))
+    print("u", u * (180 / math.pi))
     print("Semi-major axis: ", round(a, 4), "km")
     print("Eccenticity: ", round(e, 4))
     print("Inclination: ", round(i, 4), "deg")
