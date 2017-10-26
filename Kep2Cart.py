@@ -24,7 +24,7 @@ e = 0.704482
 i = rad(63.1706)
 omega = rad(281.646)
 RAAN = rad(206.346)
-mu=3.985992e14
+mu = 3.985992e14
 
 #Error tolerance
 etol = 1e-8
@@ -32,7 +32,8 @@ etol = 1e-8
 T = math.pi * 2 * math.sqrt(a**3/mu)
 print ("period", T, "secs")
 t = 0
-step = 10000
+step = 1
+results = np.empty((0,3))
 try:
     while t <= T:
 
@@ -88,10 +89,13 @@ try:
         print ("v", (v_mag * R)/1000)
         t = t + step
         print(t)
+        #for k in range(1):
+        results = np.append(results, r_comp)
+
 except KeyboardInterrupt:
     print('interrupted!')
 
-
+print(results)
 #fig = plt.figure()
 #ax = Axes3D(fig)
 #X_AXIS = np.arange(-1000000000, 1000000000, 10000000)
@@ -99,11 +103,11 @@ except KeyboardInterrupt:
 #Axes3D.autoscale_view(tight=None, scalex=True, scaley=True)
 #ax.plot(r_comp[0], r_comp[1])
 #plt.show()
-
+size = results.size
 ax = fig.gca(projection='3d')
-x = (-20, 20, 1)
-y = (-20, 20, 1)
-z = (-20, 20, 1)
+x = (results[0], results[int(size-3)], 1)
+y = (results[1], results[int(size-2)], 1)
+z = (results[2], results[int(size-1)], 1)
 
 ax.plot(x, y, z, label='Orbit Path')
 ax.legend()
