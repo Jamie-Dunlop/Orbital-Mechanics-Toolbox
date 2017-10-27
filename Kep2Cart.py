@@ -137,7 +137,7 @@ x = (resultsx)
 y = (resultsy)
 z = (resultsz)
 #plt.plot(x,y,z)
-ax.scatter(x,y,z)
+ax.plot(x,y,z)
 ax.legend()
 
 plt.show()
