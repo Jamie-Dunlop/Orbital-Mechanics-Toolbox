@@ -132,11 +132,6 @@ print(resultsx, resultsy, resultsz)
 
 size = resultsx.size
 ax = fig.gca(projection='3d')
-# x = (resultsx)
-# #results[1], results[int(size-2)]
-# y = (resultsy)
-# z = (resultsz)
-#plt.plot(x,y,z)
 ax.plot(resultsx, resultsy, resultsz)
 ax.legend()
 
