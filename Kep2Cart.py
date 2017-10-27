@@ -33,7 +33,7 @@ etol = 1e-8
 T = math.pi * 2 * math.sqrt(a**3/mu)
 print ("period", T, "secs")
 t = 0
-step = 100
+step = 1
 resultsx = np.empty((0,1))
 resultsy = np.empty((0,1))
 resultsz = np.empty((0,1))
@@ -132,12 +132,12 @@ print(resultsx, resultsy, resultsz)
 
 size = resultsx.size
 ax = fig.gca(projection='3d')
-x = (resultsx)
-#results[1], results[int(size-2)]
-y = (resultsy)
-z = (resultsz)
+# x = (resultsx)
+# #results[1], results[int(size-2)]
+# y = (resultsy)
+# z = (resultsz)
 #plt.plot(x,y,z)
-ax.plot(x,y,z)
+ax.plot(resultsx, resultsy, resultsz)
 ax.legend()
 
 plt.show()
