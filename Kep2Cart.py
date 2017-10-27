@@ -7,6 +7,12 @@
 #def kepler(ecc, M):
 import math
 import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.patches import Ellipse, Circle
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
 def rad(X):
     return ((X * math.pi) / 180)
 
@@ -19,7 +25,7 @@ e = 0.704482
 i = rad(63.1706)
 omega = rad(281.646)
 RAAN = rad(206.346)
-mu=3.985992e14
+mu = 3.985992e14
 
 #Error tolerance
 etol = 1e-8
@@ -27,7 +33,10 @@ etol = 1e-8
 T = math.pi * 2 * math.sqrt(a**3/mu)
 print ("period", T, "secs")
 t = 0
-step = 1
+step = 100
+resultsx = np.empty((0,1))
+resultsy = np.empty((0,1))
+resultsz = np.empty((0,1))
 try:
     while t <= T:
 
@@ -83,5 +92,52 @@ try:
         print ("v", (v_mag * R)/1000)
         t = t + step
         print(t)
+        #for k in range(1):
+        resultsx = np.append(resultsx, r_comp[0])
+        resultsy = np.append(resultsy, r_comp[1])
+        resultsz = np.append(resultsz, r_comp[2])
+
 except KeyboardInterrupt:
     print('interrupted!')
+
+print(resultsx, resultsy, resultsz)
+
+# def midpoints(x):
+#     sl = ()
+#     for i in range(x.ndim):
+#         x = (x[sl + np.index_exp[:-1]] + x[sl + np.index_exp[1:]]) / 2.0
+#         sl += np.index_exp[:]
+#     return x
+
+# prepare some coordinates, and attach rgb values to each
+# r, g, b = np.indices((17, 17, 17)) / 16.0
+# rc = midpoints(r)
+# gc = midpoints(g)
+# bc = midpoints(b)
+#
+# # define a sphere about [0.5, 0.5, 0.5]
+# sphere = (rc - 0)**2 + (gc - 0)**2 + (bc - 0)**2 < 0.5**2
+#
+# # combine the color components
+# colors = np.zeros(sphere.shape + (3,))
+# colors[..., 0] = rc
+# colors[..., 1] = gc
+# colors[..., 2] = bc
+#
+# ax.voxels(r, g, b, sphere,
+#           facecolors=colors,
+#           edgecolors=np.clip(2*colors - 0.5, 0, 1),  # brighter
+#           linewidth=0.5)
+# ax.set(xlabel='r', ylabel='g', zlabel='b')
+
+size = resultsx.size
+ax = fig.gca(projection='3d')
+x = (resultsx)
+#results[1], results[int(size-2)]
+y = (resultsy)
+z = (resultsz)
+#plt.plot(x,y,z)
+ax.scatter(x,y,z)
+ax.legend()
+
+plt.show()
