@@ -33,7 +33,7 @@ etol = 1e-8
 T = math.pi * 2 * math.sqrt(a**3/mu)
 print ("period", T, "secs")
 t = 0
-step = 1
+step = 10
 resultsx = np.empty((0,1))
 resultsy = np.empty((0,1))
 resultsz = np.empty((0,1))
@@ -102,37 +102,17 @@ except KeyboardInterrupt:
 
 print(resultsx, resultsy, resultsz)
 
-# def midpoints(x):
-#     sl = ()
-#     for i in range(x.ndim):
-#         x = (x[sl + np.index_exp[:-1]] + x[sl + np.index_exp[1:]]) / 2.0
-#         sl += np.index_exp[:]
-#     return x
+#Plot Earth sphere
+u = np.linspace(0, 2 * np.pi, 100)
+v = np.linspace(0, np.pi, 100)
+x = 1000000 * np.outer(np.cos(u), np.sin(v))
+y = 1000000* np.outer(np.sin(u), np.sin(v))
+z = 1000000 * np.outer(np.ones(np.size(u)), np.cos(v))
+ax.plot_surface(x, y, z, color='b')
 
-# prepare some coordinates, and attach rgb values to each
-# r, g, b = np.indices((17, 17, 17)) / 16.0
-# rc = midpoints(r)
-# gc = midpoints(g)
-# bc = midpoints(b)
-#
-# # define a sphere about [0.5, 0.5, 0.5]
-# sphere = (rc - 0)**2 + (gc - 0)**2 + (bc - 0)**2 < 0.5**2
-#
-# # combine the color components
-# colors = np.zeros(sphere.shape + (3,))
-# colors[..., 0] = rc
-# colors[..., 1] = gc
-# colors[..., 2] = bc
-#
-# ax.voxels(r, g, b, sphere,
-#           facecolors=colors,
-#           edgecolors=np.clip(2*colors - 0.5, 0, 1),  # brighter
-#           linewidth=0.5)
-# ax.set(xlabel='r', ylabel='g', zlabel='b')
-
-size = resultsx.size
+#Plot Orbit
 ax = fig.gca(projection='3d')
-ax.plot(resultsx, resultsy, resultsz)
+ax.plot(resultsx, resultsy, resultsz, color='r')
 ax.legend()
-
+ax.axis('equal')
 plt.show()
