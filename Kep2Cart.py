@@ -105,9 +105,9 @@ print(resultsx, resultsy, resultsz)
 #Plot Earth sphere
 u = np.linspace(0, 2 * np.pi, 100)
 v = np.linspace(0, np.pi, 100)
-x = 1000000 * np.outer(np.cos(u), np.sin(v))
-y = 1000000* np.outer(np.sin(u), np.sin(v))
-z = 1000000 * np.outer(np.ones(np.size(u)), np.cos(v))
+x = 6371000* np.outer(np.cos(u), np.sin(v))
+y = 6371000* np.outer(np.sin(u), np.sin(v))
+z = 6371000 * np.outer(np.ones(np.size(u)), np.cos(v))
 ax.plot_surface(x, y, z, color='b')
 
 #Plot Orbit
