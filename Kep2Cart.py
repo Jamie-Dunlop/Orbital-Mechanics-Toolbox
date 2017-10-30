@@ -33,7 +33,7 @@ etol = 1e-8
 T = math.pi * 2 * math.sqrt(a**3/mu)
 print ("period", T, "secs")
 t = 0
-step = 10
+step = 100
 resultsx = np.empty((0,1))
 resultsy = np.empty((0,1))
 resultsz = np.empty((0,1))
@@ -114,5 +114,14 @@ ax.plot_surface(x, y, z, color='b')
 ax = fig.gca(projection='3d')
 ax.plot(resultsx, resultsy, resultsz, color='r')
 ax.legend()
-ax.axis('equal')
+#ax.axis('equal')
+max_range = np.array([resultsx.max()-resultsx.min(), resultsy.max()-resultsy.min(), resultsz.max()-resultsz.min()]).max() / 2.0
+
+mid_x = (resultsx.max()+resultsx.min()) * 0.5
+mid_y = (resultsy.max()+resultsy.min()) * 0.5
+mid_z = (resultsz.max()+resultsz.min()) * 0.5
+ax.set_xlim(mid_x - max_range, mid_x + max_range)
+ax.set_ylim(mid_y - max_range, mid_y + max_range)
+ax.set_zlim(mid_z - max_range, mid_z + max_range)
+#ax.autoscale(enable=True, axis='both', tight=None)
 plt.show()
