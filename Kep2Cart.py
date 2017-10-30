@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.patches import Ellipse, Circle
 fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
+ax = fig.gca(projection='3d')
 
 def rad(X):
     return ((X * math.pi) / 180)
@@ -33,7 +33,7 @@ etol = 1e-8
 T = math.pi * 2 * math.sqrt(a**3/mu)
 print ("period", T, "secs")
 t = 0
-step = 100
+step = 1000
 resultsx = np.empty((0,1))
 resultsy = np.empty((0,1))
 resultsz = np.empty((0,1))
@@ -111,7 +111,6 @@ z = 6371000 * np.outer(np.ones(np.size(u)), np.cos(v))
 ax.plot_surface(x, y, z, color='b')
 
 #Plot Orbit
-ax = fig.gca(projection='3d')
 ax.plot(resultsx, resultsy, resultsz, color='r')
 ax.legend()
 #ax.axis('equal')
