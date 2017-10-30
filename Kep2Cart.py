@@ -6,10 +6,12 @@
 
 #def kepler(ecc, M):
 import math
+import time
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.patches import Ellipse, Circle
+t0 = time.time()
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 
@@ -31,9 +33,9 @@ mu = 3.985992e14
 etol = 1e-8
 #period
 T = math.pi * 2 * math.sqrt(a**3/mu)
-print ("period", T, "secs")
+####print ("period", T, "secs")
 t = 0
-step = 1000
+step = 1
 resultsx = np.empty((0,1))
 resultsy = np.empty((0,1))
 resultsz = np.empty((0,1))
@@ -59,12 +61,12 @@ try:
         except KeyboardInterrupt:
             print('interrupted!')
 
-        print ("Error" ,error)
-        print ("Eccentric anomaly", deg(E)) #2.71
+        ####print ("Error" ,error)
+        ####print ("Eccentric anomaly", deg(E)) #2.71
 
         #true anomaly
         V = 2 * math.atan(math.sqrt((1+e) / (1-e) ) * math.tan(E/2))
-        print ("True anomaly" , deg(V))
+        ####print ("True anomaly" , deg(V))
 
         # rotation matrix
         u = omega + V
@@ -74,12 +76,12 @@ try:
         R3 = math.sin(u) * math.sin(i)
         R = np.matrix([[R1], [R2], [R3]])
 
-        print ("Rotation Matrix", R)
+        ####print ("Rotation Matrix", R)
 
         #radius
         r=(a*(1 - e**2))/(1 + (e * math.cos(V)))
         r_comp = r * R
-        print ("r", r_comp/1000, "km")
+        ####print ("r", r_comp/1000, "km")
 
         #velocity
         #v = math.sqrt(mu * ((2/r) - (1/a)))
@@ -89,9 +91,9 @@ try:
         v_x = math.sqrt(mu/(a * (1-e**2))) * math.sin(V)
         v_y = math.sqrt(mu/(a * (1-e**2))) * (e + math.cos(V))
         v_mag = math.sqrt(v_x**2 + v_y**2)
-        print ("v", (v_mag * R)/1000)
+        ####print ("v", (v_mag * R)/1000)
         t = t + step
-        print(t)
+        ####print(t)
         #for k in range(1):
         resultsx = np.append(resultsx, r_comp[0])
         resultsy = np.append(resultsy, r_comp[1])
@@ -101,6 +103,9 @@ except KeyboardInterrupt:
     print('interrupted!')
 
 print(resultsx, resultsy, resultsz)
+t1 = time.time()
+total = t1-t0
+print('Time',total)
 
 #Plot Earth sphere
 u = np.linspace(0, 2 * np.pi, 100)
