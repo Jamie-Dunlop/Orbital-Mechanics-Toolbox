@@ -102,7 +102,7 @@ try:
 except KeyboardInterrupt:
     print('interrupted!')
 
-print(resultsx, resultsy, resultsz)
+#print(resultsx, resultsy, resultsz)
 t1 = time.time()
 total = t1-t0
 print('Time',total)
@@ -126,6 +126,5 @@ mid_y = (resultsy.max()+resultsy.min()) * 0.5
 mid_z = (resultsz.max()+resultsz.min()) * 0.5
 ax.set_xlim(mid_x - max_range, mid_x + max_range)
 ax.set_ylim(mid_y - max_range, mid_y + max_range)
-ax.set_zlim(mid_z - max_range, mid_z + max_range)
-#ax.autoscale(enable=True, axis='both', tight=None)
+ax.set_zlim(-1e7, mid_z + max_range)
 plt.show()
