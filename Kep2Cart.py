@@ -22,23 +22,33 @@ def deg(X):
     return ((X / math.pi) * 180)
 
 #Test values
-a = 26559000 #m
-e = 0.704482
-i = rad(63.1706)
-omega = rad(281.646)
-RAAN = rad(206.346)
+# a = 26559000 #m
+# e = 0.704482
+# i = rad(63.1706)
+# omega = rad(281.646)
+# RAAN = rad(206.346)
 mu = 3.985992e14
+#Geo-Orbit
+a = 42169440 #m
+e = 0.000751
+i = rad(3.69930)
+omega = rad(311.204)
+RAAN = rad(67.205)
+
 
 #Error tolerance
 etol = 1e-8
 #period
 T = math.pi * 2 * math.sqrt(a**3/mu)
-####print ("period", T, "secs")
+print ("period", T, "secs")
 t = 0
 step = 1
-resultsx = np.empty((0,1))
-resultsy = np.empty((0,1))
-resultsz = np.empty((0,1))
+r_resultsx = np.empty((0,1))
+r_resultsy = np.empty((0,1))
+r_resultsz = np.empty((0,1))
+vsat_resultsx = np.empty((0,1))
+vsat_resultsy = np.empty((0,1))
+vsat_resultsz = np.empty((0,1))
 try:
     while t <= T:
 
@@ -84,46 +94,52 @@ try:
         ####print ("r", r_comp/1000, "km")
 
         #velocity
-        #v = math.sqrt(mu * ((2/r) - (1/a)))
-        #v_comp = v * R
-        #print ("v", v_comp)
+        v = math.sqrt(mu * ((2/r) - (1/a)))
+        v_comp = v * R
+        #print ("v", v)
 
-        v_x = math.sqrt(mu/(a * (1-e**2))) * math.sin(V)
-        v_y = math.sqrt(mu/(a * (1-e**2))) * (e + math.cos(V))
-        v_mag = math.sqrt(v_x**2 + v_y**2)
+        #v_x = math.sqrt(mu/(a * (1-e**2))) * math.sin(V)
+        #v_y = math.sqrt(mu/(a * (1-e**2))) * (e + math.cos(V))
+        #v_mag = math.sqrt(v_x**2 + v_y**2)
         ####print ("v", (v_mag * R)/1000)
         t = t + step
+
+
         ####print(t)
         #for k in range(1):
-        resultsx = np.append(resultsx, r_comp[0])
-        resultsy = np.append(resultsy, r_comp[1])
-        resultsz = np.append(resultsz, r_comp[2])
+        r_resultsx = np.append(r_resultsx, r_comp[0])
+        r_resultsy = np.append(r_resultsy, r_comp[1])
+        r_resultsz = np.append(r_resultsz, r_comp[2])
+
+        vsat_resultsx = np.append(vsat_resultsx, vsat_comp[0])
+        vsat_resultsy = np.append(vsat_resultsy, vsat_comp[1])
+        vsat_resultsz = np.append(vsat_resultsz, vsat_comp[2])
 
 except KeyboardInterrupt:
     print('interrupted!')
 
-#print(resultsx, resultsy, resultsz)
+print(r_resultsx, r_resultsy, r_resultsz)
 t1 = time.time()
 total = t1-t0
 print('Time',total)
 
 #Plot Earth sphere
 u = np.linspace(0, 2 * np.pi, 100)
-v = np.linspace(0, np.pi, 100)
-x = 6371000* np.outer(np.cos(u), np.sin(v))
-y = 6371000* np.outer(np.sin(u), np.sin(v))
-z = 6371000 * np.outer(np.ones(np.size(u)), np.cos(v))
-ax.plot_surface(x, y, z, color='b')
+vearth = np.linspace(0, np.pi, 100)
+x = 6371000* np.outer(np.cos(u), np.sin(vearth))
+y = 6371000* np.outer(np.sin(u), np.sin(vearth))
+z = 6371000 * np.outer(np.ones(np.size(u)), np.cos(vearth))
+ax.plot_surface(x, y, z, color='g')
 
 #Plot Orbit
-ax.plot(resultsx, resultsy, resultsz, color='r')
+ax.plot(r_resultsx, r_resultsy, r_resultsz, color='g')
 ax.legend()
 #ax.axis('equal')
-max_range = np.array([resultsx.max()-resultsx.min(), resultsy.max()-resultsy.min(), resultsz.max()-resultsz.min()]).max() / 2.0
+max_range = np.array([r_resultsx.max()-r_resultsx.min(), r_resultsy.max()-r_resultsy.min(), r_resultsz.max()-r_resultsz.min()]).max() / 2.0
 
-mid_x = (resultsx.max()+resultsx.min()) * 0.5
-mid_y = (resultsy.max()+resultsy.min()) * 0.5
-mid_z = (resultsz.max()+resultsz.min()) * 0.5
+mid_x = (r_resultsx.max()+r_resultsx.min()) * 0.5
+mid_y = (r_resultsy.max()+r_resultsy.min()) * 0.5
+mid_z = (r_resultsz.max()+r_resultsz.min()) * 0.5
 ax.set_xlim(mid_x - max_range, mid_x + max_range)
 ax.set_ylim(mid_y - max_range, mid_y + max_range)
 ax.set_zlim(-1e7, mid_z + max_range)
