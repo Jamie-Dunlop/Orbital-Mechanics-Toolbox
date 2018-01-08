@@ -33,6 +33,12 @@ for j in range(1,n):
 for j in range(n):
     print (t[j],r[j])
 
+# u = np.linspace(0, 2 * np.pi, 100)
+# vearth = np.linspace(0, np.pi, 100)
+# xe[u] = 6371000*math.cos(u)
+# ye[u] = 6371000*math.sin(u)
+
+# plt.plot(xe,ye)
 plt.plot(x,y)
 plt.xlabel("X-Position")
 plt.ylabel("Y-position")
