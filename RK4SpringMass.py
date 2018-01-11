@@ -43,9 +43,11 @@ for j in range (1, n):
 
 print (x)
 plt.plot(t, x)
-plt.xlim(0)
+axes = plt.gca()
+axes.set_xlim([0, 50])
+axes.set_ylim([-0.8,0.8])
 plt.xlabel("Time (seconds)")
 plt.ylabel("X-position (m)")
-plt.title("Spring Mass Damper System")
+plt.title("RK4 Spring Mass Damper System")
 plt.grid()
 plt.show()

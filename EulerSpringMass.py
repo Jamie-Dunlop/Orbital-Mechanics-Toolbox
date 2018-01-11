@@ -13,26 +13,29 @@ xdot0 = 0
 #Acceleration
 #acc = (-g/L)*theta
 #Number of steps
-n = 1000
+h = 0.001
 
-deltat = (tf-t0)/n
-x = np.zeros([n])
-xdot = np.zeros([n])
+n = (tf-t0)/h
+n = int(n)
+xe = np.zeros([n])
+xedot = np.zeros([n])
 t = np.linspace(t0,tf,n)
 
-xdot[0] = xdot0
-x[0] = x0
+xedot[0] = xdot0
+xe[0] = x0
 for j in range(1,n):
-    xdot[j] = deltat*((-c*xdot[j-1]-k*x[j-1])/m) + xdot[j-1]
-    x[j] = deltat*(xdot[j-1]) + x[j-1]
+    xedot[j] = deltat*((-c*xedot[j-1]-k*xe[j-1])/m) + xedot[j-1]
+    xe[j] = deltat*(xedot[j-1]) + xe[j-1]
 
 for j in range(n):
-    print (t[j],x[j])
+    print (t[j],xe[j])
 
-plt.plot(t,x)
-plt.xlim(1)
+plt.plot(t,xe)
+axes = plt.gca()
+axes.set_xlim([0, 50])
+axes.set_ylim([-0.8,0.8])
 plt.xlabel("Time (seconds)")
 plt.ylabel("X-position (m)")
-plt.title("Spring Mass Damper System")
+plt.title("Euler Spring Mass Damper System")
 plt.grid()
 plt.show()
