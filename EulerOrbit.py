@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 #Inital conditions
 t0 = 0
-tf = 2000000
+tf = 864000
 r0 = 42164000 #m
 mu = 3.986004418e14 #m something s something
 rdot0 = 3070000 #m/s
@@ -29,8 +29,10 @@ for j in range(1,n):
     rdot[j] = deltat*(-mu/r[j-1]**2) + rdot[j-1]
     r[j] = deltat*(rdot[j-1]) + r[j-1]
     theta[j] = (t[j]/T)*2*math.pi
-    x[j] = r[j]*math.cos(theta[j])
-    y[j] = r[j]*math.sin(theta[j])
+    if theta[j] > 2*math.pi:
+        print (theta[j])
+        x[j] = r[j]*math.cos(theta[j])
+        y[j] = r[j]*math.sin(theta[j])
 
 # for j in range(n):
 #     print (r[j])
@@ -39,8 +41,6 @@ for j in range(1,n):
 # vearth = np.linspace(0, np.pi, 100)
 # xe[u] = 6371000*math.cos(u)
 # ye[u] = 6371000*math.sin(u)
-print (x)
-print (y)
 # plt.plot(xe,ye)
 plt.plot(x,y)
 plt.xlabel("X-Position")
