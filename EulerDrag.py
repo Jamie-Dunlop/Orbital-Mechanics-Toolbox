@@ -13,6 +13,26 @@ T = 2*math.pi*math.sqrt(r0**3/mu)
 #Number of steps
 n = 10000
 
+Area = 5 #m^2
+BChigh = 1
+BClow = 12
+mass = 50 #kg
+Rearth = 6371008 #m
+
+h = r0 - Rearth
+
+T = -131.21 + 0.00299 * h
+
+p = 2.488 * ((T + 273.1) / (216.6)) ** -11.388
+
+Rho = p / (0.2869 * ( T + 273.1 ))
+
+V = np.sqrt ( mu / r0 )
+
+Cd = mass / ( BChigh * Area)
+
+Drag = 0.5 * Rho * V ** 2 * Area * Cd
+
 deltat = (tf-t0)/n
 r = np.zeros([n])
 rdot = np.zeros([n])
@@ -29,12 +49,9 @@ x[0] = r0
 y[0] = 0
 f = 0
 for j in range(1,n):
-    rdot[j] = deltat*(-mu/r[j-1]**2) + rdot[j-1]
+    rdot[j] = deltat*(Drag / mass) + rdot[j-1]
     r[j] = deltat*(rdot[j-1]) + r[j-1]
-    # xdot[j] = (deltat*(-mu/r0**2)*math.cos(theta[j]) + xdot[j-1])
-    # x[j] = deltat*(xdot[j-1]) + x[j-1]
-    # ydot[j] = (deltat*(-mu/r0**2)*math.sin(theta[j]) + ydot[j-1])
-    # y[j] = deltat*(ydot[j-1]) + y[j-1]
+
     theta[j] = (t[j]/T)*2*math.pi - f*2*math.pi
     if theta[j] > 2*math.pi:
         f = f + 1

@@ -24,8 +24,8 @@ t = np.linspace(t0,tf,n)
 xedot[0] = xdot0
 xe[0] = x0
 for j in range(1,n):
-    xedot[j] = deltat*((-c*xedot[j-1]-k*xe[j-1])/m) + xedot[j-1]
-    xe[j] = deltat*(xedot[j-1]) + xe[j-1]
+    xedot[j] = h*((-c*xedot[j-1]-k*xe[j-1])/m) + xedot[j-1]
+    xe[j] = h*(xedot[j-1]) + xe[j-1]
 
 for j in range(n):
     print (t[j],xe[j])
