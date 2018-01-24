@@ -9,8 +9,8 @@ t0 = 0
 tf = 864000 #s
 mu = 3.986004418e14 #m something s something
 r0 = np.array([32164000, 0, 0]) #m  42164000 - geo distance
-rdot0 = np.array([0, 3070, 0]) #m/s
-h = 1
+rdot0 = np.array([0, math.sqrt(mu/np.linalg.norm(r0)), 0]) #m/s
+h = 0.5
 Area = 5 #m^2
 BChigh = 1
 BClow = 12
@@ -29,7 +29,7 @@ z=[]
 r = [[]]
 r[0] = r0
 r.insert(1,r0)
-
+rmod = [[]]
 rdot = [[]]
 rdot[0] = rdot0
 rdot.insert(1, rdot0)
@@ -38,11 +38,8 @@ t = np.linspace(t0,tf,n)
 
 def Rho(r):
     alt = r - Rearth
-
     T = -131.21 + 0.00299 * alt
-
     p = 2.488 * ((T + 273.1) / (216.6)) ** -11
-
     return p / (0.2869 * ( T + 273.1 ))
 
 def f(X):
@@ -88,11 +85,12 @@ for j in range (1, n):
 
         rdot[j] = rdot[j-1] + ((h/6) * (k1rdot + 2 * k2rdot + 2 * k3rdot + k4rdot))
         r[j] = r[j-1] + ((h/6) * (k1r + 2*k2r + 2*k3r + k4r))
-
+        rmod[j-1] = np.linalg.norm(r[j])
         # rdot[j] = rdot[j-1] + ((1/3) * (k1rdot + (2 * k2rdot) + k3rdot + k4rdot))
         # r[j] = r[j-1] + ((1/3) * (k1r + (2 * k2r) + k3r + k4r))
 
         r.insert(j, r[j])
+        rmod.insert(j, rmod[j-1])
         rdot.insert(j, rdot[j])
         x.insert(j, r[j-1][0])
         y.insert(j, r[j-1][1])
@@ -101,14 +99,22 @@ for j in range (1, n):
         if np.linalg.norm(r[j]) < Rearth:
             break
 
-
-
 # print ('r', r)
 # print('rdot', rdot)
 # print (x, y)
-plt.plot(x, y)
+plt.plot(x,y)
+plt.subplot(2,1,1)
+plt.plot(x,y)
 plt.xlabel("X-position (m)")
 plt.ylabel("Y-position (m)")
 plt.title("RK4 - Orbit")
 plt.grid()
+
+plt.subplot(2,1,2)
+plt.plot(t,rmod)
+plt.xlabel("Time (s)")
+plt.ylabel("Radius (m)")
+plt.title("Radisu change over time")
+plt.grid()
+
 plt.show()
