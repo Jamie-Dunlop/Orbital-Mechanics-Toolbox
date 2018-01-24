@@ -4,11 +4,14 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
-
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.patches import Ellipse, Circle
+fig = plt.figure()
+ax = fig.gca(projection='3d')
 t0 = 0
 tf = 864000 #s
 mu = 3.986004418e14 #m something s something
-r0 = np.array([32164000, 0, 0]) #m  42164000 - geo distance
+r0 = np.array([6871008, 0, 0]) #m  42164000 - geo distance
 rdot0 = np.array([0, math.sqrt(mu/np.linalg.norm(r0)), 0]) #m/s
 h = 0.5
 Area = 5 #m^2
@@ -99,22 +102,62 @@ for j in range (1, n):
         if np.linalg.norm(r[j]) < Rearth:
             break
 
+# # print ('r', r)
+# # print('rdot', rdot)
+# # print (x, y)
+# plt.plot(x,y)
+# plt.subplot(2,1,1)
+# plt.plot(x,y)
+# plt.xlabel("X-position (m)")
+# plt.ylabel("Y-position (m)")
+# plt.title("RK4 - Orbit")
+# plt.grid()
+#
+# plt.subplot(2,1,2)
+# plt.plot(t,rmod)
+# plt.xlabel("Time (s)")
+# plt.ylabel("Radius (m)")
+# plt.title("Radisu change over time")
+# plt.grid()
+#
+# plt.show()
+
 # print ('r', r)
 # print('rdot', rdot)
 # print (x, y)
-plt.plot(x,y)
-plt.subplot(2,1,1)
-plt.plot(x,y)
-plt.xlabel("X-position (m)")
-plt.ylabel("Y-position (m)")
+
+#Plot Orbit
+ax.plot(x, y, z, color = 'r')
+ax.set_xlabel("X-position (m)")
+ax.set_ylabel("Y-position (m)")
+ax.set_zlabel("Z-position (m)")
 plt.title("RK4 - Orbit")
 plt.grid()
 
-plt.subplot(2,1,2)
-plt.plot(t,rmod)
-plt.xlabel("Time (s)")
-plt.ylabel("Radius (m)")
-plt.title("Radisu change over time")
-plt.grid()
+#Plot Earth sphere
+u = np.linspace(0, 2 * np.pi, 100)
+vearth = np.linspace(0, np.pi, 100)
+xe = 6371008 * np.outer(np.cos(u), np.sin(vearth))
+ye = 6371008 * np.outer(np.sin(u), np.sin(vearth))
+ze = 6371008 * np.outer(np.ones(np.size(u)), np.cos(vearth))
+ax.plot_surface(xe, ye, ze, color='b')
+
+ax.set_xlim(-8e6, 8e6)
+ax.set_ylim(-8e6, 8e6)
+ax.set_zlim(-8e6, 8e6)
+
+
+# xmod = np.linalg.norm(x)
+# ymod = np.linalg.norm(y)
+# zmod = np.linalg.norm(z)
+
+# max_range = np.array([xmod.max()-xmod.min(), ymod.max()-ymod.min(), zmod.max()-zmod.min()]).max() / 2.0
+#
+# mid_x = (xmod.max()+xmod.min()) * 0.5
+# mid_y = (ymod.max()+ymod.min()) * 0.5
+# mid_z = (zmod.max()+zmod.min()) * 0.5
+# ax.set_xlim(mid_x - max_range, mid_x + max_range)
+# ax.set_ylim(mid_y - max_range, mid_y + max_range)
+# ax.set_zlim(mid_z - max_range, mid_z + max_range)
 
 plt.show()
