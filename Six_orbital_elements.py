@@ -49,47 +49,47 @@ def orb_elems(r, v, mu):
     if dot(e_v, k) < 0:
         omega = 2 * math.pi - omega
 
-    RAAN_Guess = 206.346 * (math.pi / 180)
-
-    u = math.atan((49.17 / math.sin(i)) / ((-10515.45 * math.cos(RAAN_Guess) + (-5235.37 * math.sin(RAAN_Guess)))))
+    # RAAN_Guess = 206.346 * (math.pi / 180)
+    #
+    # u = math.atan((49.17 / math.sin(i)) / ((-10515.45 * math.cos(RAAN_Guess) + (-5235.37 * math.sin(RAAN_Guess)))))
 
     #True anomaly
     V = math.acos((dot(e_v, r))/(e * mod(r)))
     if dot(r, v) < 0:
        V = 2 * math.pi - V
 
-    print("Orbit energy: ", round(epsilon, 4))
-    print("Angular Momentum vector: ", H)
-    print("Omega_2", u - V * (180 / math.pi))
-    print("u", u * (180 / math.pi))
-    print("Semi-major axis: ", round(a, 4), "km")
-    print("Eccenticity: ", round(e, 4))
-    print("Inclination: ", round(i, 4), "deg")
-    print("Argument of the perigee: ",round(omega * 180 / math.pi, 4), "deg")
-    print("True anomaly: ", round(V * 180 / math.pi, 4) , "deg")
-    print("RAAN: ", round(RAAN, 4), "deg")
+    # print("Orbit energy: ", round(epsilon, 4))
+    # print("Angular Momentum vector: ", H)
+    # # print("Omega_2", u - V * (180 / math.pi))
+    # # print("u", u * (180 / math.pi))
+    # print("Semi-major axis: ", round(a, 4), "km")
+    # print("Eccenticity: ", round(e, 4))
+    # print("Inclination: ", round(i, 4), "deg")
+    # print("Argument of the perigee: ",round(omega * 180 / math.pi, 4), "deg")
+    # print("True anomaly: ", round(V * 180 / math.pi, 4) , "deg")
+    # print("RAAN: ", round(RAAN, 4), "deg")
 
-    return
+    return a, e, i, omega, RAAN, V
 
-def vectors(Vel, height, gamma):
-    v_tan = Vel * math.sin(gamma * math.pi / 180)
-    v_rad = Vel * math.cos(gamma * math.pi / 180)
-    r_x = height * math.cos(115 * math.pi / 180)
-    r_y = height * math.sin(115 * math.pi / 180)
+# def vectors(Vel, height, gamma):
+#     v_tan = Vel * math.sin(gamma * math.pi / 180)
+#     v_rad = Vel * math.cos(gamma * math.pi / 180)
+#     r_x = height * math.cos(115 * math.pi / 180)
+#     r_y = height * math.sin(115 * math.pi / 180)
+#
+#     print ("v_tan", v_tan)
+#     print ("v_rad", v_rad)
+#     print ("r_x", r_x)
+#     print ("r_y", r_y)
 
-    print ("v_tan", v_tan)
-    print ("v_rad", v_rad)
-    print ("r_x", r_x)
-    print ("r_y", r_y)
 
+    # return v_tan, v_rad, r_x, r_y
 
-    return v_tan, v_rad, r_x, r_y
-
-Vel = 7605
-gamma = 0.45
-height = 495
-
-v_tan, v_rad, r_x, r_y = vectors(Vel, height, gamma)
+# Vel = 7605
+# gamma = 0.45
+# height = 495
+#
+# v_tan, v_rad, r_x, r_y = vectors(Vel, height, gamma)
 
 #orb_elems([r_x, r_y, -1.405667119e-4], [v_tan, v_rad, -4.05058737e-5], 3.986004e14)
 orb_elems([-10515.45, -5235.37, 49.17], [-2.10305, -4.18146, -5.563290], 398600) #Molniya orbit
