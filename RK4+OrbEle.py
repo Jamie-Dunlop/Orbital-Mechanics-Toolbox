@@ -14,7 +14,7 @@ ax = fig.gca(projection='3d')
 t0 = 0
 tf = 864000 #s
 mu = 3.986004418e14 #m something s something
-r0 = np.array([42164000 , 0, 0]) #m  42164000 - geo distance
+r0 = np.array([6871008, 0, 0]) #m  42164000 - geo distance
 rdot0 = np.array([0, math.sqrt(mu/np.linalg.norm(r0)), 0]) #m/s
 h = 0.5
 Area = 5 #m^2
@@ -58,7 +58,9 @@ def Rho(r):
     return p / (0.2869 * ( T + 273.1 ))
 
 def f(X):
-    return ((-mu) * (X)) / np.linalg.norm(X) ** 3 - (0.5 * Rho(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Area * Cd) / mass
+    Gravity = ((-mu) * (X)) / np.linalg.norm(X) ** 3
+    Drag = - (0.5 * Rho(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Area * Cd) / mass
+    return  Gravity + Drag
 
 for j in range (1, n):
 
@@ -222,7 +224,7 @@ plt.subplot(3,3,6)
 plt.plot(t,Vlist)
 plt.xlabel("Time (s)")
 plt.ylabel("V")
-plt.title("V")
+plt.title("RAAN")
 plt.grid()
 
 plt.show()
