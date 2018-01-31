@@ -51,14 +51,15 @@ t = np.linspace(t0,tf,n)
 
 print(t)
 
+#US atmospheric density model only applicable when alt > 25000m
 def Rho(r):
     alt = r - Rearth
-    T = -131.21 + 0.00299 * alt
-    p = 2.488 * ((T + 273.1) / (216.6)) ** -11
-    return p / (0.2869 * ( T + 273.1 ))
+    Temp = -131.21 + 0.00299 * alt
+    p = 2.488 * ((Temp + 273.1) / (216.6)) ** -11 #should that be 11.388?
+    return p / (0.2869 * ( Temp + 273.1 ))
 
 def f(X):
-    Gravity = ((-mu) * (X)) / np.linalg.norm(X) ** 3
+    Gravity = ((-mu) * (X)) / np.linalg.norm(X) ** 3 #monopole gravity model?
     Drag = - (0.5 * Rho(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Area * Cd) / mass
     return  Gravity + Drag
 
