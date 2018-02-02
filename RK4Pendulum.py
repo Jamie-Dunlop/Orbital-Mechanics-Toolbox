@@ -4,11 +4,12 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import Constants
+
 t0 = 0
-tf = 100
+tf = 1000
 theta0 = 1
-g = 9.81
-L = 9.81
+L = 9.798
 thetadot0 = 0
 h = 0.001
 n = (tf-t0)//h
@@ -20,7 +21,7 @@ theta[0] = theta0
 t = np.linspace(t0,tf,n)
 
 def f(x):
-    return (-g/L)*x
+    return (-Constants.g / L) * x
 
 for j in range (1, n):
 

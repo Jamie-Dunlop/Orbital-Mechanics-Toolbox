@@ -1,12 +1,12 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import Constants
 
 #Inital conditions
 t0 = 0
-tf = 100
+tf = 1000
 theta0 = 0.5
-g = 9.81
 L = 9.81
 thetadot0 = 0
 #Acceleration
@@ -23,7 +23,7 @@ t = np.linspace(t0,tf,n)
 thetadot[0] = thetadot0
 theta[0] = theta0
 for j in range(1,n):
-    thetadot[j] = h*((-g/L)*theta[j-1]) + thetadot[j-1]
+    thetadot[j] = h*((-Constants.g/L)*theta[j-1]) + thetadot[j-1]
     theta[j] = h*(thetadot[j-1]) + theta[j-1]
 
 # for j in range(n):

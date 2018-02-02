@@ -3,6 +3,8 @@
 #that fully define an orbit are calculated
 import math
 import numpy as np
+import Constants
+
 #Dot product function
 def dot(A, B):
     return (A[0] * B [0] + A[1] * B[1] + A[2] * B[2])
@@ -22,14 +24,14 @@ def mod(vector):
 def orb_elems(r, v, mu):
 
     #Orbital energy
-    epsilon = 0.5 * mod(v) ** 2 - mu/mod(r)
+    epsilon = 0.5 * mod(v) ** 2 - Constants.mu/mod(r)
     #Semi-major axis
-    a = -mu / (2 * epsilon)
+    a = -Constants.mu / (2 * epsilon)
 
     #Angular Momentum vector
     H = cross(r, v)
     #Eccenticity vector
-    e_v = (1 / mu) * (cross(v, H) - (mu * np.array(r))/mod(r))
+    e_v = (1 / Constants.mu) * (cross(v, H) - (Constants.mu * np.array(r))/mod(r))
     e = mod(e_v)
 
     #Unit vector along direction of ascending nodes
@@ -92,7 +94,7 @@ def orb_elems(r, v, mu):
 # v_tan, v_rad, r_x, r_y = vectors(Vel, height, gamma)
 
 #orb_elems([r_x, r_y, -1.405667119e-4], [v_tan, v_rad, -4.05058737e-5], 3.986004e14)
-orb_elems([-10515.45, -5235.37, 49.17], [-2.10305, -4.18146, -5.563290], 398600) #Molniya orbit
+orb_elems([-10515.45, -5235.37, 49.17], [-2.10305, -4.18146, -5.563290], Constants.mu) #Molniya orbit
 # r = [4.1852e7, 6.2778e7, 10.463e7]
 # v = [2.5936e4, 5.1872e4, 0]
 # mu = 1.40812
