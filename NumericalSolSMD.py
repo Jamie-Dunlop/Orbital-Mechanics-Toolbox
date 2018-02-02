@@ -25,6 +25,7 @@ Dampfreq = Natfreq * math.sqrt(1-Critdamp**2)
 A = x0
 B = (x0 * Critdamp) / (math.sqrt(1-Critdamp**2))
 
+#Exact Solution
 for j in range(1,n):
     x[j] = math.exp(-Critdamp*Natfreq*t[j])*(A*math.cos(Dampfreq*t[j]) + B*math.sin(Dampfreq*t[j]))
 print (x)
@@ -35,6 +36,7 @@ xr[0] = x0
 def f(a,b):
     return (-c*a-k*b)/m
 
+#RK4
 for j in range (1, n):
 
         k1xdot = f(xdot[j-1], xr[j-1])
@@ -52,6 +54,7 @@ for j in range (1, n):
         xdot[j] = (xdot[j-1] + ((h/6) * (k1xdot + 2*k2xdot + 2*k3xdot + k4xdot)))
         xr[j] = (xr[j-1] + ((h/6) * (k1x + 2*k2x + 2*k3x + k4x)))
 
+#Euler
 xedot[0] = xdot0
 xe[0] = x0
 
@@ -59,6 +62,9 @@ for j in range(1,n):
     xedot[j] = h*((-c*xedot[j-1]-k*xe[j-1])/m) + xedot[j-1]
     xe[j] = h*(xedot[j-1]) + xe[j-1]
 
+print('Exact Error', 100*(x-x)/x)
+print('Runge-Kutta Error',100*(x-xr)/x)
+print('Euler Error', 100*(x-xe)/x)
 plt.plot(t,x, 'r-')
 plt.plot(t,xr, 'b-')
 plt.plot(t,xe, 'y-')
