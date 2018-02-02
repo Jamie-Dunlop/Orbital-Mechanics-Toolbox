@@ -6,23 +6,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.patches import Ellipse, Circle
-
 from Six_orbital_elements import dot, cross, mod, orb_elems
+import Constants
 
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 
-mu = 3.986004418e14 #m something s something
 r0 = np.array([7371008, 0, 0]) #m  42164000 - geo distance
-rdot0 = np.array([0, math.sqrt(mu/np.linalg.norm(r0)), 0]) #m/s
+rdot0 = np.array([0, math.sqrt(Constants.mu/np.linalg.norm(r0)), 0]) #m/s
 h = 0.5
 Area = 5 #m^2
 BChigh = 1
 BClow = 12
 mass = 50 #kg
-Rearth = 6371008 #m
 
-T = 2 * math.pi * math.sqrt (np.linalg.norm(r0) ** 3 / mu)
+T = 2 * math.pi * math.sqrt (np.linalg.norm(r0) ** 3 / Constants.mu)
 
 NumOrbits = 5
 t0 = 0
@@ -57,14 +55,14 @@ print(t)
 
 #US atmospheric density model only applicable when alt > 25000m
 def Rho(r):
-    alt = r - Rearth
+    alt = r - Constants.Rearth
     Temp = -131.21 + 0.00299 * alt
     Pres = 2.488 * ((Temp + 273.1) / (216.6)) ** -11 #should that be 11.388?
     return Pres / (0.2869 * ( Temp + 273.1 ))
 
 
 def f(X):
-    Gravity = ((-mu) * (X)) / np.linalg.norm(X) ** 3 #monopole gravity model?
+    Gravity = ((-Constants.mu) * (X)) / np.linalg.norm(X) ** 3 #monopole gravity model?
     Drag = - (0.5 * Rho(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Area * Cd) / mass
     return  Gravity + Drag
 
@@ -94,7 +92,7 @@ for j in range (1, n):
         y.insert(j, r[j-1][1])
         z.insert(j, r[j-1][2])
 
-        a = orb_elems(r[j], rdot[j], mu)
+        a = orb_elems(r[j], rdot[j], Constants.mu)
         alist.insert(j-1, a[0])
         elist.insert(j, a[1])
         ilist.insert(j, a[2])
@@ -102,7 +100,7 @@ for j in range (1, n):
         RAANlist.insert(j, a[4])
         Vlist.insert(j, a[5])
 
-        if np.linalg.norm(r[j]) < Rearth:
+        if np.linalg.norm(r[j]) < Constants.Rearth:
             t = t[:j]
             break
 

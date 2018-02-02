@@ -2,7 +2,7 @@
 
 mu = 3.986004418e14 # m^3s^-2
 MassEarth = 5.2793e24 #kg
-GravConst = 6.67e-11
+GravConst = 6.67408e-11 #m^3/kg*s^2
 g = 9.798 #m/s^2
 J2 = 1082.63e-6
 
