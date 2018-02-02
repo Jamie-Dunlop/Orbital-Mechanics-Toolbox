@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.patches import Ellipse, Circle
+
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 t0 = 0
@@ -22,8 +23,10 @@ Rearth = 6371008 #m
 n = (tf-t0)//h
 n = int(n)
 
+#Period
 T = 2 * math.pi * math.sqrt (np.linalg.norm(r0) ** 3 / mu)
 
+#Coefficient of drag calculation from ballistic coefficient
 Cd = mass / ( BClow * Area)
 
 x=[]
@@ -39,11 +42,12 @@ rdot.insert(1, rdot0)
 
 t = np.linspace(t0,tf,n)
 
+#US atmospheric density model only applicable when alt > 25000m
 def Rho(r):
     alt = r - Rearth
-    T = -131.21 + 0.00299 * alt
-    p = 2.488 * ((T + 273.1) / (216.6)) ** -11
-    return p / (0.2869 * ( T + 273.1 ))
+    Temp = -131.21 + 0.00299 * alt
+    p = 2.488 * ((Temp + 273.1) / (216.6)) ** -11 #should that be 11.388?
+    return p / (0.2869 * ( Temp + 273.1 ))
 
 def f(X):
     return ((-mu) * (X)) / np.linalg.norm(X) ** 3 - (0.5 * Rho(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Area * Cd) / mass
