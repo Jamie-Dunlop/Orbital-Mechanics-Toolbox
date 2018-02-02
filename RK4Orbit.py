@@ -11,10 +11,10 @@ import Constants
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 t0 = 0
-tf = 864000 #s
-r0 = np.array([6871008, 0, 0]) #m  42164000 - geo distance
+tf = 5*86400 #s
+r0 = np.array([42164000, 0, 0]) #m  42164000 - geo distance
 rdot0 = np.array([0, math.sqrt(Constants.mu/np.linalg.norm(r0)), 0]) #m/s
-h = 0.5
+h = 1
 Area = 5 #m^2
 BChigh = 1
 BClow = 12
@@ -114,14 +114,14 @@ plt.grid()
 #Plot Earth sphere
 u = np.linspace(0, 2 * np.pi, 100)
 vearth = np.linspace(0, np.pi, 100)
-xe = 6371008 * np.outer(np.cos(u), np.sin(vearth))
-ye = 6371008 * np.outer(np.sin(u), np.sin(vearth))
-ze = 6371008 * np.outer(np.ones(np.size(u)), np.cos(vearth))
+xe = Constants.Rearth * np.outer(np.cos(u), np.sin(vearth))
+ye = Constants.Rearth * np.outer(np.sin(u), np.sin(vearth))
+ze = Constants.Rearth * np.outer(np.ones(np.size(u)), np.cos(vearth))
 ax.plot_surface(xe, ye, ze, color='b')
 
-ax.set_xlim(-8e6, 8e6)
-ax.set_ylim(-8e6, 8e6)
-ax.set_zlim(-8e6, 8e6)
+ax.set_xlim(-1e8, 1e8)
+ax.set_ylim(-1e8, 1e8)
+ax.set_zlim(-1e8, 1e8)
 
 
 # xmod = np.linalg.norm(x)
