@@ -8,6 +8,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.patches import Ellipse, Circle
 from Six_orbital_elements import dot, cross, mod, orb_elems
 import Constants
+import Density
 
 fig = plt.figure()
 ax = fig.gca(projection='3d')
@@ -53,17 +54,9 @@ t = np.linspace(t0,tf,n)
 
 print(t)
 
-#US atmospheric density model only applicable when alt > 25000m
-def Rho(r):
-    alt = r - Constants.Rearth
-    Temp = -131.21 + 0.00299 * alt
-    Pres = 2.488 * ((Temp + 273.1) / (216.6)) ** -11.388
-    return Pres / (0.2869 * ( Temp + 273.1 ))
-
-
 def f(X):
     Gravity = ((-Constants.mu) * (X)) / np.linalg.norm(X) ** 3 #monopole gravity model?
-    Drag = - (0.5 * Rho(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Area * Cd) / mass
+    Drag = - (0.5 * Density.Density1(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Area * Cd) / mass
     return  Gravity + Drag
 
 for j in range (1, n):

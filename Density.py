@@ -1,35 +1,11 @@
-import math
-import numpy as np
-import matplotlib.pyplot as plt
+import Constants
+#US atmospheric density model only applicable when alt > 25000m
+def Density1(r):
+    alt = r - Constants.Rearth
+    Temp = -131.21 + 0.00299 * alt
+    Pres = 2.488 * ((Temp + 273.1) / (216.6)) ** -11.388
+    return Pres / (0.2869 * ( Temp + 273.1 ))
 
-h = np.linspace(25000, 600000, 1000000) #m
-
-Area = 5 #m^2
-BChigh = 1
-BClow = 12
-mass = 50 #kg
-mu = 3.986004418e14 #m something s something
-Rearth = 6371008 #m
-
-R = h + Rearth
-print(R)
-
-T = -131.21 + 0.00299 * h
-
-p = 2.488 * ((T + 273.1) / (216.6)) ** -11.388
-
-Rho = p / (0.2869 * ( T + 273.1 ))
-
-V = np.sqrt ( mu / R )
-
-Cd = mass / ( BChigh * Area)
-
-Drag = 0.5 * Rho * V ** 2 * Area * Cd
-
-print(Drag)
-plt.plot(Drag, h)
-plt.xlabel("Drag Force (N)")
-plt.ylabel("Altitude (m)")
-plt.title("Drag Force Vs Altitude")
-plt.grid()
-plt.show()
+#NRLMSISE-00
+def Density2(r):
+    
