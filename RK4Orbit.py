@@ -45,7 +45,7 @@ t = np.linspace(t0,tf,n)
 def Rho(r):
     alt = r - Constants.Rearth
     Temp = -131.21 + 0.00299 * alt
-    p = 2.488 * ((Temp + 273.1) / (216.6)) ** -11 #should that be 11.388?
+    p = 2.488 * ((Temp + 273.1) / (216.6)) ** -11.388
     return p / (0.2869 * ( Temp + 273.1 ))
 
 def f(X):

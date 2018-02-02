@@ -57,7 +57,7 @@ print(t)
 def Rho(r):
     alt = r - Constants.Rearth
     Temp = -131.21 + 0.00299 * alt
-    Pres = 2.488 * ((Temp + 273.1) / (216.6)) ** -11 #should that be 11.388?
+    Pres = 2.488 * ((Temp + 273.1) / (216.6)) ** -11.388
     return Pres / (0.2869 * ( Temp + 273.1 ))
 
 
