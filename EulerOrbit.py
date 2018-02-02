@@ -18,7 +18,7 @@ rdot0 = np.array([0, math.sqrt(Constants.mu / np.linalg.norm(r0)), 0]) #m/s
 #Acceleration
 T = 2 * math.pi * math.sqrt(np.linalg.norm(r0) ** 3 / Constants.mu)
 #Number of steps
-n = 86400000
+n = 1728000
 
 deltat = (tf-t0)/n
 # r = np.zeros([n])
