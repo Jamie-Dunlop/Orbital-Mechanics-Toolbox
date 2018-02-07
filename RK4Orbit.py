@@ -1,6 +1,7 @@
 #Chris Lowther 06/11/2017
 #Runge-Kutta 4th order
 
+import Main
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -10,36 +11,27 @@ import Constants
 
 fig = plt.figure()
 ax = fig.gca(projection='3d')
-t0 = 0
-tf = 5*86400 #s
-r0 = np.array([42164000, 0, 0]) #m  42164000 - geo distance
-rdot0 = np.array([0, math.sqrt(Constants.mu/np.linalg.norm(r0)), 0]) #m/s
-h = 1
-Area = 5 #m^2
-BChigh = 1
-BClow = 12
-mass = 50 #kg
-n = (tf-t0)//h
+n = (Main.tf-Main.t0)//Main.h
 n = int(n)
 
 #Period
-T = 2 * math.pi * math.sqrt (np.linalg.norm(r0) ** 3 / Constants.mu)
+T = 2 * math.pi * math.sqrt (np.linalg.norm(Main.r0) ** 3 / Constants.mu)
 
 #Coefficient of drag calculation from ballistic coefficient
-Cd = mass / ( BClow * Area)
+Cd = Main.mass / ( Main.BClow * Main.Area)
 
 x=[]
 y=[]
 z=[]
 r = [[]]
-r[0] = r0
-r.insert(1,r0)
+r[0] = Main.r0
+r.insert(1,Main.r0)
 rmod = [[]]
 rdot = [[]]
-rdot[0] = rdot0
-rdot.insert(1, rdot0)
+rdot[0] = Main.rdot0
+rdot.insert(1, Main.rdot0)
 
-t = np.linspace(t0,tf,n)
+t = np.linspace(Main.t0,Main.tf,n)
 
 #US atmospheric density model only applicable when alt > 25000m
 def Rho(r):
@@ -49,7 +41,7 @@ def Rho(r):
     return p / (0.2869 * ( Temp + 273.1 ))
 
 def f(X):
-    return ((-Constants.mu) * (X)) / np.linalg.norm(X) ** 3 - (0.5 * Rho(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Area * Cd) / mass
+    return ((-Constants.mu) * (X)) / np.linalg.norm(X) ** 3 - (0.5 * Rho(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Main.Area * Cd) / Main.mass
 
 for j in range (1, n):
 
@@ -65,8 +57,8 @@ for j in range (1, n):
         k4rdot = f(r[j-1] + (k3r))
         k4r = rdot[j-1] + k3rdot
 
-        rdot[j] = rdot[j-1] + ((h/6) * (k1rdot + 2 * k2rdot + 2 * k3rdot + k4rdot))
-        r[j] = r[j-1] + ((h/6) * (k1r + 2*k2r + 2*k3r + k4r))
+        rdot[j] = rdot[j-1] + ((Main.h/6) * (k1rdot + 2 * k2rdot + 2 * k3rdot + k4rdot))
+        r[j] = r[j-1] + ((Main.h/6) * (k1r + 2*k2r + 2*k3r + k4r))
         rmod[j-1] = np.linalg.norm(r[j])
 
         r.insert(j, r[j])
@@ -119,9 +111,9 @@ ye = Constants.Rearth * np.outer(np.sin(u), np.sin(vearth))
 ze = Constants.Rearth * np.outer(np.ones(np.size(u)), np.cos(vearth))
 ax.plot_surface(xe, ye, ze, color='b')
 
-ax.set_xlim(-1e8, 1e8)
-ax.set_ylim(-1e8, 1e8)
-ax.set_zlim(-1e8, 1e8)
+ax.set_xlim(-8e6, 8e6)
+ax.set_ylim(-8e6, 8e6)
+ax.set_zlim(-8e6, 8e6)
 
 
 # xmod = np.linalg.norm(x)
