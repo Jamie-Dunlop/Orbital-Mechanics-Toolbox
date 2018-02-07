@@ -55,11 +55,12 @@ def rk4(x, h, y, f):
     return x + h, y + (k1 + 2*(k2 + k3) + k4)/6.0
 
 timed = 0
+jr = 0
 while timed < 100:
-    jr = 0
+    jr = jr
     timed, state = rk4(timed, h, state, damped_spring)
     xr[jr] = state[0]
-    print('state',xr[jr])
+    # print('state',xr[jr])
     jr += 1
 
 
