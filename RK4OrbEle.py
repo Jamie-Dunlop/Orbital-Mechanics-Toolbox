@@ -1,6 +1,7 @@
 #Chris Lowther 06/11/2017
 #Runge-Kutta 4th order
 
+import Main
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,35 +14,23 @@ import Density
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 
-r0 = np.array([7371008, 0, 0]) #m  42164000 - geo distance
-rdot0 = np.array([0, math.sqrt(Constants.mu/np.linalg.norm(r0)), 0]) #m/s
-h = 0.5
-Area = 5 #m^2
-BChigh = 1
-BClow = 12
-mass = 50 #kg
+T = 2 * math.pi * math.sqrt (np.linalg.norm(Main.r0) ** 3 / Constants.mu)
 
-T = 2 * math.pi * math.sqrt (np.linalg.norm(r0) ** 3 / Constants.mu)
-
-NumOrbits = 5
-t0 = 0
-tf = NumOrbits * T #s
-
-n = (tf-t0)//h
+n = (Main.tf-Main.t0)//Main.h
 n = int(n)
 
-Cd = mass / ( BClow * Area)
+Cd = Main.mass / ( Main.BClow * Main.Area)
 
 x=[]
 y=[]
 z=[]
 r = [[]]
-r[0] = r0
-r.insert(1,r0)
+r[0] = Main.r0
+r.insert(1,Main.r0)
 rmod = [[]]
 rdot = [[]]
-rdot[0] = rdot0
-rdot.insert(1, rdot0)
+rdot[0] = Main.rdot0
+rdot.insert(1, Main.rdot0)
 
 alist=[]
 elist=[]
@@ -50,13 +39,11 @@ omegalist=[]
 RAANlist=[]
 Vlist=[]
 
-t = np.linspace(t0,tf,n)
-
-print(t)
+t = np.linspace(Main.t0,Main.tf,n)
 
 def f(X):
     Gravity = ((-Constants.mu) * (X)) / np.linalg.norm(X) ** 3 #monopole gravity model?
-    Drag = - (0.5 * Density.Density1(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Area * Cd) / mass
+    Drag = - (0.5 * Density.Density1(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Main.Area * Cd) / Main.mass
     return  Gravity + Drag
 
 for j in range (1, n):
@@ -73,8 +60,8 @@ for j in range (1, n):
         k4rdot = f(r[j-1] + (k3r))
         k4r = rdot[j-1] + k3rdot
 
-        rdot[j] = rdot[j-1] + ((h/6) * (k1rdot + 2 * k2rdot + 2 * k3rdot + k4rdot))
-        r[j] = r[j-1] + ((h/6) * (k1r + 2*k2r + 2*k3r + k4r))
+        rdot[j] = rdot[j-1] + ((Main.h/6) * (k1rdot + 2 * k2rdot + 2 * k3rdot + k4rdot))
+        r[j] = r[j-1] + ((Main.h/6) * (k1r + 2*k2r + 2*k3r + k4r))
         rmod[j-1] = np.linalg.norm(r[j-1])
 
         rdot.insert(j, rdot[j])
@@ -86,7 +73,7 @@ for j in range (1, n):
         z.insert(j, r[j-1][2])
 
         a = orb_elems(r[j], rdot[j], Constants.mu)
-        alist.insert(j-1, a[0])
+        alist.insert(j, a[0])
         elist.insert(j, a[1])
         ilist.insert(j, a[2])
         omegalist.insert(j, a[3])
@@ -140,20 +127,6 @@ for j in range (1, n):
 # ax.set_xlim(-8e6, 8e6)
 # ax.set_ylim(-8e6, 8e6)
 # ax.set_zlim(-8e6, 8e6)
-
-
-# xmod = np.linalg.norm(x)
-# ymod = np.linalg.norm(y)
-# zmod = np.linalg.norm(z)
-
-# max_range = np.array([xmod.max()-xmod.min(), ymod.max()-ymod.min(), zmod.max()-zmod.min()]).max() / 2.0
-#
-# mid_x = (xmod.max()+xmod.min()) * 0.5
-# mid_y = (ymod.max()+ymod.min()) * 0.5
-# mid_z = (zmod.max()+zmod.min()) * 0.5
-# ax.set_xlim(mid_x - max_range, mid_x + max_range)
-# ax.set_ylim(mid_y - max_range, mid_y + max_range)
-# ax.set_zlim(mid_z - max_range, mid_z + max_range)
 
 # plt.show()
 
