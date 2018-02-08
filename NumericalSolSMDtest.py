@@ -3,13 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 t0 = 0
-tf = 500
+tf = 50
 x0 = -0.8
 m = 1
 k = 1
 c = 0.05
 xdot0 = 0
-h = 0.001
+h = 0.01
 n = (tf-t0)//h
 n = int(n)
 state = np.array([-0.8, 0])
@@ -61,11 +61,11 @@ for jr in range(1,n):
 
 
 print('state',xr)
-ExactError = ((x-x)/x)*100
+ExactError = x-x
 print('Exact Error', ExactError)
-EulerError = ((xe-x)/x)*100
+EulerError = xe-x
 print('Euler Error', EulerError)
-RungeError =((xr-x)/x)*100
+RungeError =xr-x
 print('Runge-Kutta Error',RungeError)
 
 plt.figure(1)
@@ -73,7 +73,7 @@ plt.plot(t,x, 'r-')
 plt.plot(t,xe, 'y-')
 plt.plot(t,xr, 'b-')
 axes = plt.gca()
-axes.set_xlim([0, 500])
+axes.set_xlim([0, 50])
 axes.set_ylim([-0.8,0.8])
 plt.xlabel("Time (seconds)")
 plt.ylabel("X-position (m)")
