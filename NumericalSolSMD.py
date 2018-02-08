@@ -3,15 +3,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 t0 = 0
-tf = 500
+tf = 50
 x0 = -0.8
 m = 1
-k = 2
-c = 0.4
+k = 1
+c = 0.05
 xdot0 = 0
-h = 0.001
+h = 0.01
 n = (tf-t0)//h
 n = int(n)
+state = np.array([-0.8, 0])
 t = np.linspace(t0,tf,n)
 x = np.zeros([n])
 xr = np.zeros([n])
@@ -39,35 +40,32 @@ for j in range(1,n):
     xe[j] = h*(xedot[j-1]) + xe[j-1]
 
 #RK4
-xdot[0] = xdot0
-xr[0] = x0
 
-def f(a,b):
-    return (-c*a-k*b)/m
+def damped_spring(t, state):
+    pos, vel = state
+    stiffness = k
+    damping = c
+    return np.array([vel, -stiffness*pos - damping*vel])
 
-for j in range (1, n):
+def rk4(x, h, y, f):
+    k1 = h * f(x, y)
+    k2 = h * f(x + 0.5*h, y + 0.5*k1)
+    k3 = h * f(x + 0.5*h, y + 0.5*k2)
+    k4 = h * f(x + h, y + k3)
+    return x + h, y + (k1 + 2*(k2 + k3) + k4)/6.0
 
-        k1xdot = f(xdot[j-1], xr[j-1])
-        k1x = xdot[j-1]
-
-        k2xdot =f(xdot[j-1] + (k1xdot), xr[j-1] + (k1x))
-        k2x = xdot[j-1] + k1xdot
-
-        k3xdot = f(xdot[j-1] + (k2xdot), xr[j-1] + (k2x))
-        k3x = xdot[j-1] + k2xdot
-
-        k4xdot = f(xdot[j-1] + (k3xdot), xr[j-1] + (k3x))
-        k4x = xdot[j-1] + k3xdot
-
-        xdot[j] = (xdot[j-1] + ((h/6) * (k1xdot + 2*k2xdot + 2*k3xdot + k4xdot)))
-        xr[j] = (xr[j-1] + ((h/6) * (k1x + 2*k2x + 2*k3x + k4x)))
+timed = 0
+for jr in range(1,n):
+    timed, state = rk4(timed, h, state, damped_spring)
+    xr[jr] = state[0]
 
 
-ExactError = ((x-x)/x)*100
+print('state',xr)
+ExactError = x-x
 print('Exact Error', ExactError)
-EulerError = ((xe-x)/x)*100
+EulerError = xe-x
 print('Euler Error', EulerError)
-RungeError =((xr-x)/x)*100
+RungeError =xr-x
 print('Runge-Kutta Error',RungeError)
 
 plt.figure(1)
@@ -75,7 +73,7 @@ plt.plot(t,x, 'r-')
 plt.plot(t,xe, 'y-')
 plt.plot(t,xr, 'b-')
 axes = plt.gca()
-axes.set_xlim([0, 500])
+axes.set_xlim([0, 50])
 axes.set_ylim([-0.8,0.8])
 plt.xlabel("Time (seconds)")
 plt.ylabel("X-position (m)")
@@ -87,7 +85,7 @@ plt.plot(t,ExactError, 'r-')
 plt.plot(t,EulerError, 'y-')
 plt.plot(t,RungeError, 'b-')
 plt.xlabel("Time (seconds)")
-plt.ylabel("Percentage Error")
+plt.ylabel("Absolute Error")
 plt.title("Error Comparison Spring Mass Damper")
 plt.grid()
 plt.show()
