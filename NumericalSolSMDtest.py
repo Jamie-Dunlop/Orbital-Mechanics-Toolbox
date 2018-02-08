@@ -6,8 +6,8 @@ t0 = 0
 tf = 500
 x0 = -0.8
 m = 1
-k = 2
-c = 0.4
+k = 1
+c = 0.05
 xdot0 = 0
 h = 0.001
 n = (tf-t0)//h
@@ -43,8 +43,8 @@ for j in range(1,n):
 
 def damped_spring(t, state):
     pos, vel = state
-    stiffness = 2
-    damping = 0.4
+    stiffness = k
+    damping = c
     return np.array([vel, -stiffness*pos - damping*vel])
 
 def rk4(x, h, y, f):
@@ -55,21 +55,17 @@ def rk4(x, h, y, f):
     return x + h, y + (k1 + 2*(k2 + k3) + k4)/6.0
 
 timed = 0
-jr = 0
-while timed < 100:
-    jr = jr
+for jr in range(1,n):
     timed, state = rk4(timed, h, state, damped_spring)
     xr[jr] = state[0]
-    # print('state',xr[jr])
-    jr += 1
 
 
 print('state',xr)
-ExactError = ((x-x))*100
+ExactError = ((x-x)/x)*100
 print('Exact Error', ExactError)
-EulerError = ((xe-x))*100
+EulerError = ((xe-x)/x)*100
 print('Euler Error', EulerError)
-RungeError =((xr-x))*100
+RungeError =((xr-x)/x)*100
 print('Runge-Kutta Error',RungeError)
 
 plt.figure(1)

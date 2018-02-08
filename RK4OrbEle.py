@@ -46,7 +46,7 @@ def f(X):
     Drag = - (0.5 * Density.Density1(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Main.Area * Cd) / Main.mass
     return  Gravity + Drag
 
-for j in range (1, n):
+for j in range (0, n):
 
         k1rdot = f(r[j-1])
         k1r = rdot[j-1]

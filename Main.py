@@ -11,7 +11,7 @@ import Density
 
 
 #Integration properties
-h = 10  #Time step
+h = 10 #Time step
 t0 = 0  #Starting time seconds
 tf = 86400 #time or number of orbits
 #Satellite properties
@@ -23,7 +23,7 @@ mass = 50   #Mass of Satellite
 
 #Position and velocity
 def StateVec():
-    r0 = np.array([7371008, 0, 0]) #m
+    r0 = np.array([42164000, 0, 0]) #m
     rdot0 = np.array([0, math.sqrt(Constants.mu/np.linalg.norm(r0)), 0]) #m/s
     return (r0,rdot0)
 
