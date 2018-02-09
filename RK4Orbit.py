@@ -108,9 +108,9 @@ ye = Constants.Rearth * np.outer(np.sin(u), np.sin(vearth))
 ze = Constants.Rearth * np.outer(np.ones(np.size(u)), np.cos(vearth))
 ax.plot_surface(xe, ye, ze, color='b')
 
-ax.set_xlim(-8e6, 8e6)
-ax.set_ylim(-8e6, 8e6)
-ax.set_zlim(-8e6, 8e6)
+ax.set_xlim(-4.5e7, 4.5e7)
+ax.set_ylim(-4.5e7, 4.5e7)
+ax.set_zlim(-4.5e7, 4.5e7)
 
 
 # xmod = np.linalg.norm(x)
