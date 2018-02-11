@@ -11,14 +11,13 @@ import Density
 start = time.time()
 
 #Integration properties
-h = 0.01 #Time step
+h = 0.1 #Time step
 t0 = 0  #Starting time seconds
 tf = 86400 #time or number of orbits
 #Satellite properties
-Area = 5    #Wetted area
-AreaH =10   #High wetted area
-BChigh = 1  #High Baliistic coefficient
-BClow = 12  #Low Baliistic coefficient
+Area = 0.0612    #Wetted area m^2
+AreaH = 0.7276   #High wetted area m^2
+Cd = 2.147
 mass = 50   #Mass of Satellite
 
 #Position and velocity

@@ -27,6 +27,7 @@ A = x0
 B = (x0 * Critdamp) / (math.sqrt(1-Critdamp**2))
 
 #Exact Solution
+x[0] = x0
 for j in range(1,n):
     x[j] = math.exp(-Critdamp*Natfreq*t[j])*(A*math.cos(Dampfreq*t[j]) + B*math.sin(Dampfreq*t[j]))
 print (x)
@@ -55,6 +56,7 @@ def rk4(x, h, y, f):
     return x + h, y + (k1 + 2*(k2 + k3) + k4)/6.0
 
 timed = 0
+xr[0] = x0
 for jr in range(1,n):
     timed, state = rk4(timed, h, state, damped_spring)
     xr[jr] = state[0]

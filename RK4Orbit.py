@@ -18,9 +18,6 @@ n = int(n)
 #Period
 T = 2 * math.pi * math.sqrt (np.linalg.norm(Main.r0) ** 3 / Constants.mu)
 
-#Coefficient of drag calculation from ballistic coefficient
-Cd = Main.mass / ( Main.BClow * Main.Area)
-
 x=[]
 y=[]
 z=[]
@@ -30,6 +27,7 @@ r.insert(1,Main.r0)
 rmod = [[]]
 rdot = [[]]
 rdot[0] = Main.rdot0
+rmod[0] = np.linalg.norm(Main.r0)
 rdot.insert(1, Main.rdot0)
 
 t = np.linspace(Main.t0,Main.tf,n)
@@ -37,7 +35,7 @@ t = np.linspace(Main.t0,Main.tf,n)
 #Force Model
 def f(X):
     Gravity = ((-Constants.mu) * (X)) / np.linalg.norm(X) ** 3 #monopole gravity model?
-    Drag = - (0.5 * Main.DensityModel(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Main.Area * Cd) / Main.mass
+    Drag = - (0.5 * Main.DensityModel(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Main.Area * Main.Cd) / Main.mass
     return  Gravity + Drag
 
 for j in range (1, n):
@@ -66,6 +64,7 @@ for j in range (1, n):
         z.insert(j, r[j-1][2])
 
         if np.linalg.norm(r[j]) < Constants.Rearth:
+            t = t[:j]
             break
 
 # # print ('r', r)
@@ -93,6 +92,7 @@ for j in range (1, n):
 # print (x, y)
 
 #Plot Orbit
+plt.figure(1)
 ax.plot(x, y, z, color = 'r')
 ax.set_xlabel("X-position (m)")
 ax.set_ylabel("Y-position (m)")
@@ -108,9 +108,17 @@ ye = Constants.Rearth * np.outer(np.sin(u), np.sin(vearth))
 ze = Constants.Rearth * np.outer(np.ones(np.size(u)), np.cos(vearth))
 ax.plot_surface(xe, ye, ze, color='b')
 
-ax.set_xlim(-4.5e7, 4.5e7)
-ax.set_ylim(-4.5e7, 4.5e7)
-ax.set_zlim(-4.5e7, 4.5e7)
+ax.set_xlim(-8e6, 8e6)
+ax.set_ylim(-8e6, 8e6)
+ax.set_zlim(-8e6, 8e6)
+
+plt.figure(2)
+plt.plot(t,rmod)
+plt.xlabel("Time (s)")
+plt.ylabel("Radius (m)")
+plt.title("Radius change over time")
+plt.grid()
+
 
 
 # xmod = np.linalg.norm(x)
