@@ -13,7 +13,7 @@ start = time.time()
 #Integration properties
 h = 0.1 #Time step
 t0 = 0  #Starting time seconds
-tf = 86400 #time or number of orbits
+tf = 100000 #time or number of orbits
 #Satellite properties
 Area = 0.0612    #Wetted area m^2
 AreaH = 0.7276   #High wetted area m^2
@@ -22,18 +22,20 @@ mass = 50   #Mass of Satellite
 
 #Position and velocity
 def StateVec():
-    r0 = np.array([Constants.Rearth+500000, 0, 0]) #m
-    rdot0 = np.array([0, math.sqrt(Constants.mu/np.linalg.norm(r0)), 0]) #m/s
+    r0 = np.array([3169751.48119611, 5583111.16079282, -41650245.77267506]) #m
+    rdot0 = np.array([-3058.91916149, 257.54617660, -200.43184936]) #m/s
     return (r0,rdot0)
+
+
 
 #Orbital elements
 def OrbElm():
-    a =0
-    e =0
-    i =0
-    omega =0
-    RAAN =0
-    V = 0#true anomaly
+    a = 0
+    e = 0
+    i = 0
+    omega = 0
+    RAAN = 0
+    V = 0 #true anomaly
 
     return (a,e,i,omega,RAAN,V)
 

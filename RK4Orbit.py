@@ -18,13 +18,15 @@ n = int(n)
 #Period
 T = 2 * math.pi * math.sqrt (np.linalg.norm(Main.r0) ** 3 / Constants.mu)
 
+print('Period', T)
+
 x=[]
 y=[]
 z=[]
 r = [[]]
 r[0] = Main.r0
 r.insert(1,Main.r0)
-rmod = [[]]
+rmod = np.zeros([n])
 rdot = [[]]
 rdot[0] = Main.rdot0
 rmod[0] = np.linalg.norm(Main.r0)
@@ -35,7 +37,7 @@ t = np.linspace(Main.t0,Main.tf,n)
 #Force Model
 def f(X):
     Gravity = ((-Constants.mu) * (X)) / np.linalg.norm(X) ** 3 #monopole gravity model?
-    Drag = - (0.5 * Main.DensityModel(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Main.Area * Main.Cd) / Main.mass
+    Drag = - (0.5 * Main.DensityModel(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Main.AreaH * Main.Cd) / Main.mass
     return  Gravity + Drag
 
 for j in range (1, n):
@@ -54,10 +56,10 @@ for j in range (1, n):
 
         rdot[j] = rdot[j-1] + ((Main.h/6) * (k1rdot + 2 * k2rdot + 2 * k3rdot + k4rdot))
         r[j] = r[j-1] + ((Main.h/6) * (k1r + 2*k2r + 2*k3r + k4r))
-        rmod[j-1] = np.linalg.norm(r[j])
+        rmod[j] = np.linalg.norm(r[j-1])
 
         r.insert(j, r[j])
-        rmod.insert(j, rmod[j-1])
+        # rmod.insert(j, rmod[j])
         rdot.insert(j, rdot[j])
         x.insert(j, r[j-1][0])
         y.insert(j, r[j-1][1])
@@ -65,6 +67,7 @@ for j in range (1, n):
 
         if np.linalg.norm(r[j]) < Constants.Rearth:
             t = t[:j]
+            rmod = rmod[:j]
             break
 
 # # print ('r', r)
@@ -108,9 +111,9 @@ ye = Constants.Rearth * np.outer(np.sin(u), np.sin(vearth))
 ze = Constants.Rearth * np.outer(np.ones(np.size(u)), np.cos(vearth))
 ax.plot_surface(xe, ye, ze, color='b')
 
-ax.set_xlim(-8e6, 8e6)
-ax.set_ylim(-8e6, 8e6)
-ax.set_zlim(-8e6, 8e6)
+ax.set_xlim(-5e7, 5e7)
+ax.set_ylim(-5e7, 5e7)
+ax.set_zlim(-5e7, 5e7)
 
 plt.figure(2)
 plt.plot(t,rmod)
