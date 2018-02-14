@@ -12,4 +12,4 @@ Volumetric_mean_radius = 6371008 #m
 
 Rearth = 6371008 # m
 
-Geo = 42164000 #m Geostationary Radius
+Geo = 42241095.67425744 #m Geostationary Radius calculated from T = 2*pi*sqrt(a^3/mu)
