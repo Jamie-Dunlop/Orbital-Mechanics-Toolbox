@@ -38,7 +38,7 @@ t = np.linspace(Main.t0,Main.tf,n)
 def f(X):
     Gravity = ((-Constants.mu) * (X)) / np.linalg.norm(X) ** 3 #monopole gravity model?
     Drag = - (0.5 * Main.DensityModel(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Main.AreaH * Main.Cd) / Main.mass
-    return  Gravity + Drag
+    return  Gravity
 
 for j in range (1, n):
 
