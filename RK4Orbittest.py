@@ -19,59 +19,64 @@ n = int(n)
 T = 2 * math.pi * math.sqrt (np.linalg.norm(Main.r0) ** 3 / Constants.mu)
 
 print('Period', T)
-
-x=[]
-y=[]
-z=[]
+x= np.zeros([n])
+y= np.zeros([n])
+z= np.zeros([n])
+xdot= np.zeros([n])
+ydot= np.zeros([n])
+zdot= np.zeros([n])
+x[0] = Main.r0[0]
+y[0] = Main.r0[1]
+z[0] = Main.r0[2]
+xdot[0] = Main.rdot0[0]
+ydot[0] = Main.rdot0[1]
+zdot[0] = Main.rdot0[2]
 r = [[]]
-r[0] = Main.r0
-r.insert(1,Main.r0)
 rmod = np.zeros([n])
 rdot = [[]]
-rdot[0] = Main.rdot0
+# rdot[0] = Main.rdot0
 rmod[0] = np.linalg.norm(Main.r0)
-rdot.insert(1, Main.rdot0)
+# rdot.insert(1, Main.rdot0)
 
+state = np.array([Main.r0,Main.rdot0])
 t = np.linspace(Main.t0,Main.tf,n)
 
 #Force Model
-def f(X):
-    print('radius', r[j-1])
-    print('velocity', rdot[j-1])
+def Accel(R,V):
+    Gravity = ((-Constants.mu) * (R)) / np.linalg.norm(R) ** 3 #monopole gravity model?
+    Drag = - (0.5 * Main.DensityModel(np.linalg.norm(R) * np.linalg.norm(V) ** 2 * Main.AreaH * Main.Cd)) / Main.mass
+    return Gravity+Drag
 
-    Gravity = ((-Constants.mu) * (X)) / np.linalg.norm(X) ** 3 #monopole gravity model?
-    Drag = - (0.5 * Main.DensityModel(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Main.AreaH * Main.Cd) / Main.mass
-    return  Gravity
+def Orbit(t, state):
+    pos, vel = state
+    return np.array([vel, Accel(pos,vel)])
 
-for j in range (1, n):
+def rk4(x, h, y, f):
+    k1 = h * f(x, y)
+    k2 = h * f(x + 0.5*h, y + 0.5*k1)
+    k3 = h * f(x + 0.5*h, y + 0.5*k2)
+    k4 = h * f(x + h, y + k3)
+    return x + h, y + (k1 + 2*(k2 + k3) + k4)/6.0
 
-        k1rdot = f(r[j-1])
-        k1r = rdot[j-1]
+timed = 0
+for j in range(1,n):
+    timed, state = rk4(timed, Main.h, state, Orbit)
+    x[j] = state[0][0]
+    y[j] = state[0][1]
+    z[j] = state[0][2]
+    xdot[j] = state[1][0]
+    ydot[j] = state[1][1]
+    zdot[j] = state[1][2]
+    r = [x,y,z]
+    rdot = [xdot,ydot,zdot]
+    vmod = math.sqrt(xdot[j]**2+ydot[j]**2+zdot[j]**2)
+    rmod[j] = math.sqrt(x[j]**2+y[j]**2+z[j]**2)
 
-        k2rdot =f(r[j-1] + (k1r))
-        k2r = rdot[j-1] + k1rdot
 
-        k3rdot = f(r[j-1] + (k2r))
-        k3r = rdot[j-1] + k2rdot
-
-        k4rdot = f(r[j-1] + (k3r))
-        k4r = rdot[j-1] + k3rdot
-
-        rdot[j] = rdot[j-1] + ((Main.h/6) * (k1rdot + 2 * k2rdot + 2 * k3rdot + k4rdot))
-        r[j] = r[j-1] + ((Main.h/6) * (k1r + 2*k2r + 2*k3r + k4r))
-        rmod[j] = np.linalg.norm(r[j-1])
-
-        r.insert(j, r[j])
-        # rmod.insert(j, rmod[j])
-        rdot.insert(j, rdot[j])
-        x.insert(j, r[j-1][0])
-        y.insert(j, r[j-1][1])
-        z.insert(j, r[j-1][2])
-
-        if np.linalg.norm(r[j]) < Constants.Rearth:
-            t = t[:j]
-            rmod = rmod[:j]
-            break
+        # if np.linalg.norm(r[j]) < Constants.Rearth:
+        #     t = t[:j]
+        #     rmod = rmod[:j]
+        #     break
 
 # # print ('r', r)
 # # print('rdot', rdot)
@@ -114,9 +119,9 @@ ye = Constants.Rearth * np.outer(np.sin(u), np.sin(vearth))
 ze = Constants.Rearth * np.outer(np.ones(np.size(u)), np.cos(vearth))
 ax.plot_surface(xe, ye, ze, color='b')
 
-ax.set_xlim(-5e7, 5e7)
-ax.set_ylim(-5e7, 5e7)
-ax.set_zlim(-5e7, 5e7)
+ax.set_xlim(-4e6, 4e6)
+ax.set_ylim(-4e6, 4e6)
+ax.set_zlim(-4e6, 4e6)
 
 plt.figure(2)
 plt.plot(t,rmod)

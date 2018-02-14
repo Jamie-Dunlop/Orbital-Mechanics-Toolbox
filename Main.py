@@ -2,17 +2,17 @@
 #Main Simulation Script
 import time
 import Constants
-import RK4Orbit
+import RK4Orbittest
 # import RK4OrbEle
 import numpy as np
 import math
-import Six_orbital_elements
+# import Six_orbital_elements
 import Density
 
 #Integration properties
-h = 5 #Time step
+h = 10#Time step
 t0 = 0  #Starting time seconds
-tf = 1000000 #time or number of orbits
+tf = 100000 #time or number of orbits
 #Satellite properties
 Area = 0.0612    #Wetted area m^2
 AreaH = 0.7276   #High wetted area m^2
@@ -22,18 +22,18 @@ mass = 50   #Mass of Satellite
 #Position and velocity
 def StateVec():
     # r0 = np.array([3169751.48119611, 5583111.16079282, -41650245.77267506]) #m
-    r0 = np.array([Constants.Geo+77500, 0, 0])
+    r0 = np.array([Constants.Rearth+500000, 0, 0])
     # rdot0 = np.array([-3058.91916149, 257.54617660, -200.43184936]) #m/s
     rdot0 = np.array([0, math.sqrt(Constants.mu / np.linalg.norm(r0)), 0])
     return (r0,rdot0)
 
 #Orbital elements
 def OrbElm():
-    e = 0.0005304
-    i = 277.9340 #degrees
-    omega = 86.2686 #degrees
-    RAAN = 355.7087 #degrees
-    Mean_motion = 1.00272536 #revolutions per day
+    e = 0.0003536
+    i = 51.6423 #degrees
+    omega = 100.1059 #degrees
+    RAAN = 272.9736 #degrees
+    Mean_motion = 15.54090790099353 #revolutions per day
 
     return (e,i,omega,RAAN,Mean_motion)
 
@@ -42,10 +42,12 @@ def OrbElm():
 DensityModel = Density.Density1
 
 # Obtain State Vectors for Satellite
-(r0,rdot0) = StateVec()
-# (e,i,omega,RAAN,Mean_motion) = OrbElm()
-# import Kep2Cart
-# (r0, rdot0) = Kep2Cart
+# (r0,rdot0) = StateVec()
+(e,i,omega,RAAN,Mean_motion) = OrbElm()
+import Kep2Cart
+r0 = Kep2Cart.r0
+rdot0 = Kep2Cart.rdot0
+
 
 #Call the relevant scripts
-RK4Orbit
+RK4Orbittest
