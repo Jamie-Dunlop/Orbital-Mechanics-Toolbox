@@ -73,10 +73,10 @@ for j in range(1,n):
     rmod[j] = math.sqrt(x[j]**2+y[j]**2+z[j]**2)
 
 
-        # if np.linalg.norm(r[j]) < Constants.Rearth:
-        #     t = t[:j]
-        #     rmod = rmod[:j]
-        #     break
+    # if np.linalg.norm(r[j]) < Constants.Rearth:
+    #     t = t[:j]
+    #     rmod = rmod[:j]
+    #     break
 
 # # print ('r', r)
 # # print('rdot', rdot)
@@ -119,9 +119,9 @@ ye = Constants.Rearth * np.outer(np.sin(u), np.sin(vearth))
 ze = Constants.Rearth * np.outer(np.ones(np.size(u)), np.cos(vearth))
 ax.plot_surface(xe, ye, ze, color='b')
 
-ax.set_xlim(-4e6, 4e6)
-ax.set_ylim(-4e6, 4e6)
-ax.set_zlim(-4e6, 4e6)
+ax.set_xlim(-4e7, 4e7)
+ax.set_ylim(-4e7, 4e7)
+ax.set_zlim(-4e7, 4e7)
 
 plt.figure(2)
 plt.plot(t,rmod)

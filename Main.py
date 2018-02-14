@@ -10,9 +10,9 @@ import math
 import Density
 
 #Integration properties
-h = 10#Time step
+h = 1 #Time step
 t0 = 0  #Starting time seconds
-tf = 100000 #time or number of orbits
+tf = 200000 #time or number of orbits
 #Satellite properties
 Area = 0.0612    #Wetted area m^2
 AreaH = 0.7276   #High wetted area m^2
@@ -29,11 +29,11 @@ def StateVec():
 
 #Orbital elements
 def OrbElm():
-    e = 0.0003536
-    i = 51.6423 #degrees
-    omega = 100.1059 #degrees
-    RAAN = 272.9736 #degrees
-    Mean_motion = 15.54090790099353 #revolutions per day
+    e = 0.7255807
+    i = 62.3682 #degrees
+    omega = 274.7594 #degrees
+    RAAN = 257.9216 #degrees
+    Mean_motion = 2.00624950290871 #revolutions per day
 
     return (e,i,omega,RAAN,Mean_motion)
 
