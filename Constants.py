@@ -1,8 +1,7 @@
 #https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html
 
-mu = 3.986004418e14 # m^3s^-2
-MassEarth = 5.2793e24 #kg
-GravConst = 6.67408e-11 #m^3/kg*s^2
+MassEarth = 5.9723e24 #kg https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html
+GravConst = 6.67384e-11 #m^3/kg*s^2 CODATA
 g = 9.798 #m/s^2
 J2 = 1082.63e-6
 
@@ -12,4 +11,6 @@ Volumetric_mean_radius = 6371008 #m
 
 Rearth = 6371008 # m
 
-Geo = 42241095.67425744 #m Geostationary Radius calculated from T = 2*pi*sqrt(a^3/mu)
+Geo = 42240435.255265124 #m Geostationary Radius calculated from T = 2*pi*sqrt(a^3/mu)
+
+mu = MassEarth * GravConst
