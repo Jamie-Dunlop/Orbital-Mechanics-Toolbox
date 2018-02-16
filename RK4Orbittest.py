@@ -18,6 +18,8 @@ n = int(n)
 #Period
 T = 2 * math.pi * math.sqrt (np.linalg.norm(Main.r0) ** 3 / Constants.mu)
 
+No_of_orbits = int(Main.tf/T)
+
 print('Period', T)
 x= np.zeros([n])
 y= np.zeros([n])
@@ -34,6 +36,8 @@ zdot[0] = Main.rdot0[2]
 r = [[]]
 rmod = np.zeros([n])
 rdot = [[]]
+diff = np.zeros([No_of_orbits])
+Orbit_no = np.arange(1, No_of_orbits+1)
 # rdot[0] = Main.rdot0
 rmod[0] = np.linalg.norm(Main.r0)
 # rdot.insert(1, Main.rdot0)
@@ -79,7 +83,8 @@ for j in range(1,n):
 for jj in range(0,int(Main.tf/T)):
     print('R at start of orbit',jj+1,'>>',rmod[int((jj)*T/Main.h)],'m')
     print('R at end of orbit',jj+1,'>>',rmod[int((jj+1)*T/Main.h)],'m')
-    print('Difference from R at start >>',rmod[jj+1]-rmod[0])
+    diff[jj] = rmod[jj+1]-rmod[0]
+    print('Difference from R at start >>', diff)
 
 
     # if np.linalg.norm(r[j]) < Constants.Rearth:
@@ -112,32 +117,41 @@ for jj in range(0,int(Main.tf/T)):
 # print (x, y)
 
 #Plot Orbit
-plt.figure(1)
-ax.plot(x, y, z, color = 'r')
-ax.set_xlabel("X-position (m)")
-ax.set_ylabel("Y-position (m)")
-ax.set_zlabel("Z-position (m)")
-plt.title("RK4 - Orbit")
-plt.grid()
+# plt.figure(1)
+# ax.plot(x, y, z, color = 'r')
+# ax.set_xlabel("X-position (m)")
+# ax.set_ylabel("Y-position (m)")
+# ax.set_zlabel("Z-position (m)")
+# plt.title("RK4 - Orbit")
+# plt.grid()
 
 #Plot Earth sphere
-u = np.linspace(0, 2 * np.pi, 100)
-vearth = np.linspace(0, np.pi, 100)
-xe = Constants.Rearth * np.outer(np.cos(u), np.sin(vearth))
-ye = Constants.Rearth * np.outer(np.sin(u), np.sin(vearth))
-ze = Constants.Rearth * np.outer(np.ones(np.size(u)), np.cos(vearth))
-ax.plot_surface(xe, ye, ze, color='b')
+# u = np.linspace(0, 2 * np.pi, 100)
+# vearth = np.linspace(0, np.pi, 100)
+# xe = Constants.Rearth * np.outer(np.cos(u), np.sin(vearth))
+# ye = Constants.Rearth * np.outer(np.sin(u), np.sin(vearth))
+# ze = Constants.Rearth * np.outer(np.ones(np.size(u)), np.cos(vearth))
+# ax.plot_surface(xe, ye, ze, color='b')
+#
+# ax.set_xlim(-4e7, 4e7)
+# ax.set_ylim(-4e7, 4e7)
+# ax.set_zlim(-4e7, 4e7)
 
-ax.set_xlim(-4e7, 4e7)
-ax.set_ylim(-4e7, 4e7)
-ax.set_zlim(-4e7, 4e7)
+# plt.figure(2)
+# plt.plot(t,rmod)
+# plt.xlabel("Time (s)")
+# plt.ylabel("Radius (m)")
+# plt.title("Radius change over time")
+# plt.grid()
 
-plt.figure(2)
-plt.plot(t,rmod)
-plt.xlabel("Time (s)")
-plt.ylabel("Radius (m)")
+plt.figure(3)
+plt.plot(Orbit_no, diff)
+plt.xlabel("Orbit Number")
+plt.ylabel("Difference in Radius (m)")
 plt.title("Radius change over time")
 plt.grid()
+
+
 
 
 
