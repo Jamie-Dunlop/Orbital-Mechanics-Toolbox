@@ -11,7 +11,7 @@ import Density
 import csv
 
 #Integration properties
-h = 10 #Time step seconds
+h = 10#Time step seconds
 t0 = 0  #Starting time seconds
 tf = 200000 #time or number of orbits
 #Satellite properties
@@ -19,7 +19,7 @@ Area = 0.0612    #Wetted area m^2
 AreaH = 0.7276   #High wetted area m^2
 Cd = 2.147
 mass = 50   #Mass of Satellite
-
+info = {}
 #Position and velocity
 def StateVec():
     # r0 = np.array([3169751.48119611, 5583111.16079282, -41650245.77267506]) #m
@@ -29,12 +29,12 @@ def StateVec():
     return (r0,rdot0)
 
 #Orbital elements
-with open('TLE_Datatest.txt') as inf:
-    reader = csv.reader(inf,delimiter=' ')
+with open('TLE_Datatest.txt') as inf1:
+    reader = csv.reader(inf1,delimiter=' ')
     second_col = list(zip(*reader))
 
-with open('NORAD_Satellite_Codes.txt') as inf:
-    reader = csv.reader(inf,delimiter=' ')
+with open('NORAD_Satellite_Codes.txt') as inf2:
+    reader = csv.reader(inf2,delimiter=',')
     col = list(zip(*reader))
 
 def OrbElm():
@@ -44,7 +44,13 @@ def OrbElm():
     RAAN = float(list(second_col[3])[0]) #degrees
     Mean_motion = float(list(second_col[7])[0]) #revolutions per day
     Norad = list(second_col[1])[0] #NORAD ID number of Satellite
-    return (e,i,omega,RAAN,Mean_motion)
+    linenum = 0
+    for line in open('NORAD_Satellite_Codes.txt'):
+        linenum = linenum
+        if Norad in line:
+            name = list(col[1])[linenum]
+        linenum +=1
+    return (e,i,omega,RAAN,Mean_motion,name)
 
 # Selection of density model to be used
 # Density1 = US Model       Density2 =
@@ -52,7 +58,8 @@ DensityModel = Density.Density1
 
 # Obtain State Vectors for Satellite
 # (r0,rdot0) = StateVec()
-(e,i,omega,RAAN,Mean_motion) = OrbElm()
+(e,i,omega,RAAN,Mean_motion,name) = OrbElm()
+# print('name',name)
 import Kep2Cart
 r0 = Kep2Cart.r0
 rdot0 = Kep2Cart.rdot0
