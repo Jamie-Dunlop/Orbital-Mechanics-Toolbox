@@ -10,9 +10,9 @@ import math
 import Density
 
 #Integration properties
-h = 10 #Time step
+h = 0.5 #Time step
 t0 = 0  #Starting time seconds
-tf = 200000 #time or number of orbits
+tf = 432000 #time or number of orbits
 #Satellite properties
 Area = 0.0612    #Wetted area m^2
 AreaH = 0.7276   #High wetted area m^2
