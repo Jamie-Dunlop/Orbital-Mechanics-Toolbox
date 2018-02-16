@@ -41,16 +41,18 @@ rmod[0] = np.linalg.norm(Main.r0)
 state = np.array([Main.r0,Main.rdot0])
 t = np.linspace(Main.t0,Main.tf,n)
 
-#Force Model
+#Force Model including gravity and drag
 def Accel(R,V):
     Gravity = ((-Constants.mu) * (R)) / np.linalg.norm(R) ** 3 #monopole gravity model?
     Drag = - (0.5 * Main.DensityModel(np.linalg.norm(R) * np.linalg.norm(V) ** 2 * Main.AreaH * Main.Cd)) / Main.mass
     return Gravity+Drag
 
+#Gets position and velocity from state vector and calculates acceleration from Accel
 def Orbit(t, state):
     pos, vel = state
     return np.array([vel, Accel(pos,vel)])
 
+#Runge-Kutta 4 Integrator
 def rk4(x, h, y, f):
     k1 = h * f(x, y)
     k2 = h * f(x + 0.5*h, y + 0.5*k1)
@@ -58,6 +60,7 @@ def rk4(x, h, y, f):
     k4 = h * f(x + h, y + k3)
     return x + h, y + (k1 + 2*(k2 + k3) + k4)/6.0
 
+#Starts RK4 and stores position and veloctiy values obtained from RK4
 timed = 0
 for j in range(1,n):
     timed, state = rk4(timed, Main.h, state, Orbit)
@@ -71,6 +74,11 @@ for j in range(1,n):
     rdot = [xdot,ydot,zdot]
     vmod = math.sqrt(xdot[j]**2+ydot[j]**2+zdot[j]**2)
     rmod[j] = math.sqrt(x[j]**2+y[j]**2+z[j]**2)
+
+## Prints Rmod at the start and end of an orbit for error check
+for jj in range(0,int(Main.tf/T)):
+    print('R at start of orbit',jj+1,rmod[int((jj)*T/Main.h)],'m')
+    print('R at end of orbit',jj+1,rmod[int((jj+1)*T/Main.h)],'m')
 
 
     # if np.linalg.norm(r[j]) < Constants.Rearth:
