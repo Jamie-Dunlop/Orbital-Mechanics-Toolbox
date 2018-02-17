@@ -62,7 +62,7 @@ def OrbElm():
 DensityModel = Density.Density1
 
 # Obtain State Vectors for Satellite
-# (r0,rdot0) = StateVec()
+#(r0,rdot0) = StateVec()
 (e,i,omega,RAAN,Mean_motion,name) = OrbElm()
 # print('name',name)
 import Kep2Cart
