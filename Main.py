@@ -29,7 +29,7 @@ def StateVec():
     return (r0,rdot0)
 
 #Orbital elements
-with open('TLE_Datatest.txt') as inf1:
+with open('TLE_Data.txt') as inf1:
     reader = csv.reader(inf1,delimiter=' ')
     second_col = list(zip(*reader))
 
@@ -38,12 +38,17 @@ with open('NORAD_Satellite_Codes.txt') as inf2:
     col = list(zip(*reader))
 
 def OrbElm():
-    e = float(list(second_col[4])[0])/10000000
-    i = float(list(second_col[2])[0]) #degrees
-    omega = float(list(second_col[5])[0]) #degrees
-    RAAN = float(list(second_col[3])[0]) #degrees
-    Mean_motion = float(list(second_col[7])[0]) #revolutions per day
-    Norad = list(second_col[1])[0] #NORAD ID number of Satellite
+    for line in open('TLE_Data.txt'):
+        if line.startswith('1'):
+            return line
+        else:
+            print(list(second_col[4]))
+            e = float(list(second_col[4]))/10000000
+            i = float(list(second_col[2])) #degrees
+            omega = float(list(second_col[5])) #degrees
+            RAAN = float(list(second_col[3])) #degrees
+            Mean_motion = float(list(second_col[7])) #revolutions per day
+            Norad = list(second_col[1]) #NORAD ID number of Satellite
     linenum = 0
     for line in open('NORAD_Satellite_Codes.txt'):
         linenum = linenum
