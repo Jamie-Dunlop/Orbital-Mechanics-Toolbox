@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.lines as mlines
 
 t0 = 0
 tf = 50
@@ -77,6 +78,13 @@ plt.plot(t,xr, 'b-')
 axes = plt.gca()
 axes.set_xlim([0, tf])
 axes.set_ylim([-0.8,0.8])
+red_line = mlines.Line2D([], [], color='red', marker='',
+                          markersize=15, label='Exact',)
+yellow_line = mlines.Line2D([], [], color='yellow', marker='',
+                          markersize=15, label='Euler')
+blue_line = mlines.Line2D([], [], color='blue', marker='',
+                          markersize=15, label='RK4')
+plt.legend(handles=[red_line, yellow_line, blue_line])
 plt.xlabel("Time (seconds)")
 plt.ylabel("X-position (m)")
 plt.title("Exact Spring Mass Damper System")
@@ -89,6 +97,13 @@ plt.plot(t,RungeError, 'b-')
 axes = plt.gca()
 axes.set_xlim([0, tf])
 axes.set_ylim([-0.1,0.1])
+red_line = mlines.Line2D([], [], color='red', marker='',
+                          markersize=15, label='Exact',)
+yellow_line = mlines.Line2D([], [], color='yellow', marker='',
+                          markersize=15, label='Euler')
+blue_line = mlines.Line2D([], [], color='blue', marker='',
+                          markersize=15, label='RK4')
+plt.legend(handles=[red_line, yellow_line, blue_line])
 plt.xlabel("Time (seconds)")
 plt.ylabel("Absolute Error")
 plt.title("Error Comparison Spring Mass Damper")
