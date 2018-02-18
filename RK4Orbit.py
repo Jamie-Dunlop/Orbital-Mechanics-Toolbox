@@ -36,9 +36,6 @@ t = np.linspace(Main.t0,Main.tf,n)
 
 #Force Model
 def f(X):
-    print('radius', r[j-1])
-    print('velocity', rdot[j-1])
-
     Gravity = ((-Constants.mu) * (X)) / np.linalg.norm(X) ** 3 #monopole gravity model?
     Drag = - (0.5 * Main.DensityModel(np.linalg.norm(r[j-1])) * np.linalg.norm(rdot[j-1]) ** 2 * Main.AreaH * Main.Cd) / Main.mass
     return  Gravity
