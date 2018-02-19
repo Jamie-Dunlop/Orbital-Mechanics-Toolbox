@@ -2,24 +2,18 @@
 #Main Simulation Script
 import time
 import Constants
-import RK4Orbit
+import RK4Orbittest
 # import RK4OrbEle
 import numpy as np
 import math
-import Six_orbital_elements
+# import Six_orbital_elements
 import Density
 import csv
 
 #Integration properties
-<<<<<<< HEAD
-h = 10#Time step seconds
+h = 0.5 #Time step
 t0 = 0  #Starting time seconds
-tf = 200000 #time or number of orbits
-=======
-h = 5 #Time step
-t0 = 0  #Starting time seconds
-tf = 1000000 #time or number of orbits
->>>>>>> parent of 990a60b... RK4 Working....finally.
+tf = 12000 #time or number of orbits
 #Satellite properties
 Area = 0.0612    #Wetted area m^2
 AreaH = 0.7276   #High wetted area m^2
@@ -29,72 +23,53 @@ info = {}
 #Position and velocity
 def StateVec():
     # r0 = np.array([3169751.48119611, 5583111.16079282, -41650245.77267506]) #m
-<<<<<<< HEAD
-    r0 = np.array([Constants.Geo, 0, 0])
-=======
-    r0 = np.array([Constants.Geo+77500, 0, 0])
->>>>>>> parent of 990a60b... RK4 Working....finally.
+    r0 = np.array([Constants.Rearth+500000, 0, 0])
     # rdot0 = np.array([-3058.91916149, 257.54617660, -200.43184936]) #m/s
     rdot0 = np.array([0, math.sqrt(Constants.mu / np.linalg.norm(r0)), 0])
     return (r0,rdot0)
 
 #Orbital elements
-<<<<<<< HEAD
-with open('TLE_Data.txt') as inf1:
+with open('TLE_Datatest.txt') as inf1:
     reader = csv.reader(inf1,delimiter=' ')
     second_col = list(zip(*reader))
-=======
-def OrbElm():
-    e = 0.0005304
-    i = 277.9340 #degrees
-    omega = 86.2686 #degrees
-    RAAN = 355.7087 #degrees
-    Mean_motion = 1.00272536 #revolutions per day
->>>>>>> parent of 990a60b... RK4 Working....finally.
 
 with open('NORAD_Satellite_Codes.txt') as inf2:
     reader = csv.reader(inf2,delimiter=',')
     col = list(zip(*reader))
 
 def OrbElm():
-    for line in open('TLE_Data.txt'):
-        if line.startswith('1'):
-            return line
-        else:
-            print(list(second_col[4]))
-            e = float(list(second_col[4]))/10000000
-            i = float(list(second_col[2])) #degrees
-            omega = float(list(second_col[5])) #degrees
-            RAAN = float(list(second_col[3])) #degrees
-            Mean_motion = float(list(second_col[7])) #revolutions per day
-            Norad = list(second_col[1]) #NORAD ID number of Satellite
-    linenum = 0
-    for line in open('NORAD_Satellite_Codes.txt'):
-        linenum = linenum
-        if Norad in line:
-            name = list(col[1])[linenum]
-        linenum +=1
-    return (e,i,omega,RAAN,Mean_motion,name)
+    # for line in open('TLE_Data.txt'):
+    #     if line.startswith('1'):
+    #         return line
+    #     else:
+    #         print(list(second_col[4]))
+        e = float(second_col[4][0])/10000000
+        print(e)
+        i = float(second_col[2][0]) #degrees
+        omega = float(second_col[5][0]) #degrees
+        RAAN = float(second_col[3][0]) #degrees
+        Mean_motion = float(second_col[7][0]) #revolutions per day
+        Norad = second_col[1][0] #NORAD ID number of Satellite
+        linenum = 0
+        for line in open('NORAD_Satellite_Codes.txt'):
+            linenum = linenum
+            if Norad in line:
+                name = list(col[1])[linenum]
+            linenum +=1
+        return (e,i,omega,RAAN,Mean_motion,name)
 
 # Selection of density model to be used
 # Density1 = US Model       Density2 =
 DensityModel = Density.Density1
-
+# name = 'cheese'
 # Obtain State Vectors for Satellite
-<<<<<<< HEAD
-#(r0,rdot0) = StateVec()
+# (r0,rdot0) = StateVec()
 (e,i,omega,RAAN,Mean_motion,name) = OrbElm()
-# print('name',name)
+print('name',name)
 import Kep2Cart
 r0 = Kep2Cart.r0
 rdot0 = Kep2Cart.rdot0
 
-=======
-(r0,rdot0) = StateVec()
-# (e,i,omega,RAAN,Mean_motion) = OrbElm()
-# import Kep2Cart
-# (r0, rdot0) = Kep2Cart
->>>>>>> parent of 990a60b... RK4 Working....finally.
 
 #Call the relevant scripts
-RK4Orbit
+RK4Orbittest
