@@ -37,6 +37,7 @@ r = [[]]
 rmod = np.zeros([n])
 rdot = [[]]
 diff = np.zeros([No_of_orbits])
+Apogee = np.zeros([No_of_orbits])
 # diff[0] = 0
 Orbit_no = np.arange(1, No_of_orbits+1)
 # rdot[0] = Main.rdot0
@@ -48,7 +49,7 @@ t = np.linspace(Main.t0,Main.tf,n)
 
 #Force Model including gravity and drag
 def Accel(t,R,V):
-    if t > Main.tf/2:
+    if t > 3*Main.tf/4:
         Area = Main.AreaH
     else:
         Area = Main.Area
@@ -71,25 +72,33 @@ def rk4(x, h, y, f):
 
 #Starts RK4 and stores position and veloctiy values obtained from RK4
 timed = 0
+Count = 1
 for j in range(1,n):
     timed, state = rk4(timed, Main.h, state, Orbit)
-    x[j] = state[0][0]
-    y[j] = state[0][1]
-    z[j] = state[0][2]
-    xdot[j] = state[1][0]
-    ydot[j] = state[1][1]
-    zdot[j] = state[1][2]
-    r = [x,y,z]
-    rdot = [xdot,ydot,zdot]
-    vmod = math.sqrt(xdot[j]**2+ydot[j]**2+zdot[j]**2)
-    rmod[j] = math.sqrt(x[j]**2+y[j]**2+z[j]**2)
-    # print('r',rmod[j])
-    # print('Rmod',rmod[j])
-    # print('Rmod',rmod[jj])
-    if rmod[j] < Constants.Rearth:
-        t = t[:j]
-        # rmod = rmod[:j]
-        break
+    if timed < Count*T:
+        print(Count)
+        x[j] = state[0][0]
+        y[j] = state[0][1]
+        z[j] = state[0][2]
+        xdot[j] = state[1][0]
+        ydot[j] = state[1][1]
+        zdot[j] = state[1][2]
+        r = [x,y,z]
+        rdot = [xdot,ydot,zdot]
+        vmod = math.sqrt(xdot[j]**2+ydot[j]**2+zdot[j]**2)
+        rmod[j] = math.sqrt(x[j]**2+y[j]**2+z[j]**2)
+        # print('r',rmod[j])
+        # print('Rmod',rmod[j])
+        # print('Rmod',rmod[jj])
+        if rmod[j] < Constants.Rearth:
+            t = t[:j]
+            # rmod = rmod[:j]
+            break
+        Apogee[(Count-1)] = max(rmod)
+        Count +=1
+        if Count == 15:
+            break
+        print('Apogee',Apogee)
 
 ## Prints Rmod at the start and end of an orbit for error check
 for jj in range(0,int(Main.tf/T)):
@@ -98,7 +107,9 @@ for jj in range(0,int(Main.tf/T)):
     diff[jj] = rmod[int((jj+1)*T/Main.h)]-rmod[0]
     # print('Difference from R at start >>', diff)
 
-print('Ratio',((rmod[int((Main.tf/Main.h)-1)]-rmod[int(Main.tf/(2*Main.h))])/(rmod[int(Main.tf/(2*Main.h))]-rmod[0])))
+print('First', rmod[0])
+print('last',rmod[n-1])
+# print('Ratio',((rmod[int((Main.tf/Main.h)-1)]-rmod[int(Main.tf/(2*Main.h))])/(rmod[int(Main.tf/(2*Main.h))]-rmod[0])))
 # # print ('r', r)
 # # print('rdot', rdot)
 # # print (x, y)
@@ -164,9 +175,6 @@ plt.xlabel("X (m)")
 plt.ylabel("Y (m)")
 plt.title("2D Plot of {}".format(Main.name))
 plt.grid()
-
-
-
 
 
 # xmod = np.linalg.norm(x)

@@ -11,14 +11,14 @@ import Density
 import csv
 
 #Integration properties
-h = 1 #Time step
+h = 10 #Time step
 t0 = 0  #Starting time seconds
 tf = 86400 #time or number of orbits
 #Satellite properties
 Area = 0.0612    #Wetted area m^2
 AreaH = 0.7276   #High wetted area m^2
 Cd = 2.147
-mass = 50  #Mass of Satellite
+mass = 80  #Mass of Satellite
 info = {}
 #Position and velocity
 def StateVec():
@@ -90,13 +90,14 @@ def OrbElm():
 # Selection of density model to be used
 # Density1 = US Model       Density2 =
 DensityModel = Density.Density1
+
 # Obtain State Vectors for Satellite
-(r0,rdot0,name) = StateVec()
-# (e,i,omega,RAAN,Mean_motion,name) = OrbElm()
-# print('name',name)
-# import Kep2Cart
-# r0 = Kep2Cart.r0
-# rdot0 = Kep2Cart.rdot0
+# (r0,rdot0,name) = StateVec()
+(e,i,omega,RAAN,Mean_motion,name) = OrbElm()
+print('name',name)
+import Kep2Cart
+r0 = Kep2Cart.r0
+rdot0 = Kep2Cart.rdot0
 
 
 #Call the relevant scripts
