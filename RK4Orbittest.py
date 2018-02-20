@@ -47,24 +47,19 @@ state = np.array([Main.r0,Main.rdot0])
 t = np.linspace(Main.t0,Main.tf,n)
 
 #Force Model including gravity and drag
-def Accel(R,V):
+def Accel(t,R,V):
+    if t > Main.tf/2:
+        Area = Main.AreaH
+    else:
+        Area = Main.Area
     Gravity = ((-Constants.mu) * (R)) / np.linalg.norm(R) ** 3 #monopole gravity model?
-    Drag = - (0.5 * Main.DensityModel(np.linalg.norm(R))*np.linalg.norm(V) * Main.Area * Main.Cd*V) / Main.mass
-    # print('Gravity',Gravity)
-    # print('Drag', Drag)
-    # print('G+D', Gravity+Drag)
-    # print('DragDensity', Main.DensityModel(np.linalg.norm(R)))
-    # print('DragSpeed', np.linalg.norm(V))
-    # print('DragSpeedSQRD', (np.linalg.norm(V)**2))
-    # print('Area', Main.Area)
-    # print('Cd', Main.Cd)
-    # print('Mass', Main.mass)
+    Drag = - (0.5 * Main.DensityModel(np.linalg.norm(R))*np.linalg.norm(V) * Area * Main.Cd*V) / Main.mass
     return Gravity + Drag
 
 #Gets position and velocity from state vector and calculates acceleration from Accel
 def Orbit(t, state):
     pos, vel = state
-    return np.array([vel, Accel(pos,vel)])
+    return np.array([vel, Accel(t,pos,vel)])
 
 #Runge-Kutta 4 Integrator
 def rk4(x, h, y, f):
@@ -100,10 +95,10 @@ for j in range(1,n):
 for jj in range(0,int(Main.tf/T)):
     # print('R at start of orbit',jj+1,'>>',rmod[int((jj)*T/Main.h)],'m')
     # print('R at end of orbit',jj+1,'>>',rmod[int((jj+1)*T/Main.h)],'m')
-    print('index',int((jj+1)*T/Main.h))
     diff[jj] = rmod[int((jj+1)*T/Main.h)]-rmod[0]
     # print('Difference from R at start >>', diff)
 
+print('Ratio',((rmod[int((Main.tf/Main.h)-1)]-rmod[int(Main.tf/(2*Main.h))])/(rmod[int(Main.tf/(2*Main.h))]-rmod[0])))
 # # print ('r', r)
 # # print('rdot', rdot)
 # # print (x, y)
@@ -153,7 +148,7 @@ plt.figure(2)
 plt.plot(t,rmod)
 plt.xlabel("Time (s)")
 plt.ylabel("Radius (m)")
-plt.title("Radius change over time {}".format(Main.name))
+plt.title("Radius Vs time {}".format(Main.name))
 plt.grid()
 
 plt.figure(3)
@@ -161,6 +156,13 @@ plt.plot(Orbit_no, diff)
 plt.xlabel("Orbit Number")
 plt.ylabel("Difference in Radius (m)")
 plt.title("Radius difference between orbits {}".format(Main.name))
+plt.grid()
+
+plt.figure(4)
+plt.plot(x,y)
+plt.xlabel("X (m)")
+plt.ylabel("Y (m)")
+plt.title("2D Plot of {}".format(Main.name))
 plt.grid()
 
 
