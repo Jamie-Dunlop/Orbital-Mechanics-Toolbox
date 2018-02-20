@@ -37,6 +37,7 @@ r = [[]]
 rmod = np.zeros([n])
 rdot = [[]]
 diff = np.zeros([No_of_orbits])
+# diff[0] = 0
 Orbit_no = np.arange(1, No_of_orbits+1)
 # rdot[0] = Main.rdot0
 rmod[0] = np.linalg.norm(Main.r0)
@@ -48,8 +49,16 @@ t = np.linspace(Main.t0,Main.tf,n)
 #Force Model including gravity and drag
 def Accel(R,V):
     Gravity = ((-Constants.mu) * (R)) / np.linalg.norm(R) ** 3 #monopole gravity model?
-    Drag = - (0.5 * Main.DensityModel(np.linalg.norm(R)) * np.linalg.norm(V) * Main.AreaH * Main.Cd*V) / Main.mass
-    # print(Drag)
+    Drag = - (0.5 * Main.DensityModel(np.linalg.norm(R))*np.linalg.norm(V) * Main.Area * Main.Cd*V) / Main.mass
+    # print('Gravity',Gravity)
+    # print('Drag', Drag)
+    # print('G+D', Gravity+Drag)
+    # print('DragDensity', Main.DensityModel(np.linalg.norm(R)))
+    # print('DragSpeed', np.linalg.norm(V))
+    # print('DragSpeedSQRD', (np.linalg.norm(V)**2))
+    # print('Area', Main.Area)
+    # print('Cd', Main.Cd)
+    # print('Mass', Main.mass)
     return Gravity + Drag
 
 #Gets position and velocity from state vector and calculates acceleration from Accel
@@ -79,6 +88,7 @@ for j in range(1,n):
     rdot = [xdot,ydot,zdot]
     vmod = math.sqrt(xdot[j]**2+ydot[j]**2+zdot[j]**2)
     rmod[j] = math.sqrt(x[j]**2+y[j]**2+z[j]**2)
+    # print('r',rmod[j])
     # print('Rmod',rmod[j])
     # print('Rmod',rmod[jj])
     if rmod[j] < Constants.Rearth:
@@ -90,7 +100,8 @@ for j in range(1,n):
 for jj in range(0,int(Main.tf/T)):
     # print('R at start of orbit',jj+1,'>>',rmod[int((jj)*T/Main.h)],'m')
     # print('R at end of orbit',jj+1,'>>',rmod[int((jj+1)*T/Main.h)],'m')
-    diff[jj] = rmod[int((jj+1)*T/Main.h)]-rmod[int((jj)*T/Main.h)]
+    print('index',int((jj+1)*T/Main.h))
+    diff[jj] = rmod[int((jj+1)*T/Main.h)]-rmod[0]
     # print('Difference from R at start >>', diff)
 
 # # print ('r', r)

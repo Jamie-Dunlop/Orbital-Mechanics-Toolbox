@@ -30,14 +30,13 @@ def kepler():
 
     mean_motion = ((Main.Mean_motion) * 2 * math.pi) / 86400 #rad/s
 
-    a = (Constants.mu / mean_motion ** 2) ** (1/3)
+    a = (mu / mean_motion ** 2) ** (1/3)
 
     #Error tolerance
     etol = 1e-8
 
     #Period
     T = math.pi * 2 * math.sqrt(a ** 3 / mu)
-    print ("period", T, "secs")
 
     t = 0
     step = 0.1

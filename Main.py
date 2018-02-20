@@ -11,14 +11,14 @@ import Density
 import csv
 
 #Integration properties
-h = 0.5 #Time step
+h = 0.1 #Time step
 t0 = 0  #Starting time seconds
-tf = 12000 #time or number of orbits
+tf = 86400 #time or number of orbits
 #Satellite properties
-Area = 0.0612    #Wetted area m^2
+Area = 2500 #0.0612    #Wetted area m^2
 AreaH = 0.7276   #High wetted area m^2
 Cd = 2.147
-mass = 50   #Mass of Satellite
+mass = 420000  #Mass of Satellite
 info = {}
 #Position and velocity
 def StateVec():
@@ -58,10 +58,30 @@ def OrbElm():
             linenum +=1
         return (e,i,omega,RAAN,Mean_motion,name)
 
+# def OrbElm():
+#     # for line in open('TLE_Data.txt'):
+#     #     if line.startswith('1'):
+#     #         return line
+#     #     else:
+#     #         print(list(second_col[4]))
+#         e = float(second_col[4][0])/10000000
+#         print(e)
+#         i = float(second_col[2][0]) #degrees
+#         omega = float(second_col[5][0]) #degrees
+#         RAAN = float(second_col[3][0]) #degrees
+#         Mean_motion = float(second_col[7][0]) #revolutions per day
+#         Norad = second_col[1][0] #NORAD ID number of Satellite
+#         linenum = 0
+#         for line in open('NORAD_Satellite_Codes.txt'):
+#             linenum = linenum
+#             if Norad in line:
+#                 name = list(col[1])[linenum]
+#             linenum +=1
+#         return (e,i,omega,RAAN,Mean_motion,name)
+
 # Selection of density model to be used
 # Density1 = US Model       Density2 =
 DensityModel = Density.Density1
-# name = 'cheese'
 # Obtain State Vectors for Satellite
 # (r0,rdot0) = StateVec()
 (e,i,omega,RAAN,Mean_motion,name) = OrbElm()
