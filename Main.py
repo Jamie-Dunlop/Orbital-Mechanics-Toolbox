@@ -18,12 +18,11 @@ tf = 86400 #time or number of orbits
 Area = 0.0612    #Wetted area m^2
 AreaH = 0.7276   #High wetted area m^2
 Cd = 2.147
-mass = 80  #Mass of Satellite
-info = {}
+mass = 50  #Mass of Satellite
 #Position and velocity
 def StateVec():
     # r0 = np.array([3169751.48119611, 5583111.16079282, -41650245.77267506]) #m
-    r0 = np.array([Constants.Rearth+500000, 0, 0])
+    r0 = np.array([Constants.Geo, 0, 0])
     # rdot0 = np.array([-3058.91916149, 257.54617660, -200.43184936]) #m/s
     rdot0 = np.array([0, math.sqrt(Constants.mu / np.linalg.norm(r0)), 0])
     name = 'Satellite'

@@ -19,7 +19,7 @@ n = int(n)
 T = 2 * math.pi * math.sqrt (np.linalg.norm(Main.r0) ** 3 / Constants.mu)
 
 No_of_orbits = int(Main.tf/T)
-
+limit = 7e6 #Graph limits for plotting
 print('Period', T)
 x= np.zeros([n])
 y= np.zeros([n])
@@ -49,7 +49,7 @@ t = np.linspace(Main.t0,Main.tf,n)
 
 #Force Model including gravity and drag
 def Accel(t,R,V):
-    if t > 3*Main.tf/4:
+    if t > Main.tf/2:
         Area = Main.AreaH
     else:
         Area = Main.Area
@@ -75,30 +75,30 @@ timed = 0
 Count = 1
 for j in range(1,n):
     timed, state = rk4(timed, Main.h, state, Orbit)
-    if timed < Count*T:
-        print(Count)
-        x[j] = state[0][0]
-        y[j] = state[0][1]
-        z[j] = state[0][2]
-        xdot[j] = state[1][0]
-        ydot[j] = state[1][1]
-        zdot[j] = state[1][2]
-        r = [x,y,z]
-        rdot = [xdot,ydot,zdot]
-        vmod = math.sqrt(xdot[j]**2+ydot[j]**2+zdot[j]**2)
-        rmod[j] = math.sqrt(x[j]**2+y[j]**2+z[j]**2)
-        # print('r',rmod[j])
-        # print('Rmod',rmod[j])
-        # print('Rmod',rmod[jj])
-        if rmod[j] < Constants.Rearth:
-            t = t[:j]
-            # rmod = rmod[:j]
-            break
-        Apogee[(Count-1)] = max(rmod)
-        Count +=1
-        if Count == 15:
-            break
-        print('Apogee',Apogee)
+    # if timed < Count*T:
+    #     print(Count)
+    x[j] = state[0][0]
+    y[j] = state[0][1]
+    z[j] = state[0][2]
+    xdot[j] = state[1][0]
+    ydot[j] = state[1][1]
+    zdot[j] = state[1][2]
+    r = [x,y,z]
+    rdot = [xdot,ydot,zdot]
+    vmod = math.sqrt(xdot[j]**2+ydot[j]**2+zdot[j]**2)
+    rmod[j] = math.sqrt(x[j]**2+y[j]**2+z[j]**2)
+    # print('r',rmod[j])
+    # print('Rmod',rmod[j])
+    # print('Rmod',rmod[jj])
+    if rmod[j] < Constants.Rearth:
+        t = t[:j]
+        # rmod = rmod[:j]
+        break
+        # Apogee[(Count-1)] = max(rmod)
+        # Count +=1
+        # if Count == 15:
+        #     break
+        # print('Apogee',Apogee)
 
 ## Prints Rmod at the start and end of an orbit for error check
 for jj in range(0,int(Main.tf/T)):
@@ -151,22 +151,23 @@ ye = Constants.Rearth * np.outer(np.sin(u), np.sin(vearth))
 ze = Constants.Rearth * np.outer(np.ones(np.size(u)), np.cos(vearth))
 ax.plot_surface(xe, ye, ze, color='b')
 
-ax.set_xlim(-7e6, 7e6)
-ax.set_ylim(-7e6, 7e6)
-ax.set_zlim(-7e6, 7e6)
+ax.set_xlim(-limit, limit)
+ax.set_ylim(-limit, limit)
+ax.set_zlim(-limit, limit)
+# ax.set_aspect('equal')
 
 plt.figure(2)
 plt.plot(t,rmod)
 plt.xlabel("Time (s)")
 plt.ylabel("Radius (m)")
-plt.title("Radius Vs time {}".format(Main.name))
+plt.title("Radius Vs time of {}".format(Main.name))
 plt.grid()
 
 plt.figure(3)
 plt.plot(Orbit_no, diff)
 plt.xlabel("Orbit Number")
 plt.ylabel("Difference in Radius (m)")
-plt.title("Radius difference between orbits {}".format(Main.name))
+plt.title("Radius difference between orbits of {}".format(Main.name))
 plt.grid()
 
 plt.figure(4)
@@ -175,6 +176,8 @@ plt.xlabel("X (m)")
 plt.ylabel("Y (m)")
 plt.title("2D Plot of {}".format(Main.name))
 plt.grid()
+plt.axes().set_aspect('equal')
+
 
 
 # xmod = np.linalg.norm(x)
