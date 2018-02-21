@@ -19,7 +19,7 @@ n = int(n)
 T = 2 * math.pi * math.sqrt (np.linalg.norm(Main.r0) ** 3 / Constants.mu)
 
 No_of_orbits = int(Main.tf/T)
-limit = 7e6 #Graph limits for plotting
+limit = 6e7 #Graph limits for plotting
 print('Period', T)
 x= np.zeros([n])
 y= np.zeros([n])
@@ -55,7 +55,7 @@ def Accel(t,R,V):
         Area = Main.Area
     Gravity = ((-Constants.mu) * (R)) / np.linalg.norm(R) ** 3 #monopole gravity model?
     Drag = - (0.5 * Main.DensityModel(np.linalg.norm(R))*np.linalg.norm(V) * Area * Main.Cd*V) / Main.mass
-    return Gravity + Drag
+    return Gravity
 
 #Gets position and velocity from state vector and calculates acceleration from Accel
 def Orbit(t, state):
@@ -160,14 +160,14 @@ plt.figure(2)
 plt.plot(t,rmod)
 plt.xlabel("Time (s)")
 plt.ylabel("Radius (m)")
-plt.title("Radius Vs time of {}".format(Main.name))
+plt.title("Radius vs Time of {}".format(Main.name))
 plt.grid()
 
 plt.figure(3)
 plt.plot(Orbit_no, diff)
 plt.xlabel("Orbit Number")
 plt.ylabel("Difference in Radius (m)")
-plt.title("Radius difference between orbits of {}".format(Main.name))
+plt.title("Radius Difference from Original Orbit of {}".format(Main.name))
 plt.grid()
 
 plt.figure(4)
