@@ -19,7 +19,7 @@ n = int(n)
 T = 2 * math.pi * math.sqrt (np.linalg.norm(Main.r0) ** 3 / Constants.mu)
 
 No_of_orbits = int(Main.tf/T)
-limit = 6e7 #Graph limits for plotting
+limit = 7e6 #Graph limits for plotting
 print('Period', T)
 x= np.zeros([n])
 y= np.zeros([n])
@@ -49,7 +49,7 @@ t = np.linspace(Main.t0,Main.tf,n)
 
 #Force Model including gravity and drag
 def Accel(t,R,V):
-    # if t > Main.tf/2:
+    # if t > Main.tf/2 and t < ((Main.tf/2)+10800):
     #     Area = Main.AreaH
     # else:
     #     Area = Main.Area
@@ -157,10 +157,10 @@ ax.set_zlim(-limit, limit)
 # ax.set_aspect('equal')
 
 plt.figure(2)
-plt.plot(t,rmod)
+plt.plot(t,(rmod-Constants.Rearth)/1000)
 plt.xlabel("Time (s)")
-plt.ylabel("Radius (m)")
-plt.title("Radius vs Time of {}".format(Main.name))
+plt.ylabel("Altitude (km)")
+plt.title("Altitude vs Time of {}".format(Main.name))
 plt.grid()
 
 plt.figure(3)
