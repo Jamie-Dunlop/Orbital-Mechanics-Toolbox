@@ -29,7 +29,7 @@ def kepler():
     RAAN = rad(Main.RAAN)
 
     mean_motion = ((Main.Mean_motion) * 2 * math.pi) / 86400 #rad/s
-    
+
     a = (mu / mean_motion ** 2) ** (1/3)
 
     #Error tolerance

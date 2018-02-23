@@ -11,14 +11,14 @@ import Density
 import csv
 
 #Integration properties
-h = 10 #Time step
+h = 100 #Time step
 t0 = 0  #Starting time seconds
 tf = 86400 #time or number of orbits
 #Satellite properties
-Area = 0.0612    #Wetted area m^2
-AreaH = 0.7276   #High wetted area m^2
+Area = 0.01    #Wetted area m^2
+AreaH = 0.21   #High wetted area m^2
 Cd = 2.147
-mass = 50  #Mass of Satellite
+mass = 4  #Mass of Satellite
 #Position and velocity
 def StateVec():
     # r0 = np.array([3169751.48119611, 5583111.16079282, -41650245.77267506]) #m
@@ -29,7 +29,7 @@ def StateVec():
     return (r0,rdot0,name)
 
 #Orbital elements
-with open('TLE_Data.txt') as inf1:
+with open('Flock2e_TLE_Data.txt') as inf1:
     reader = csv.reader(inf1,delimiter=' ')
     second_col = list(zip(*reader))
 
@@ -45,7 +45,7 @@ def OrbElm():
     RAAN = np.zeros([1])
     Mean_motion = np.zeros([1])
     Norad = np.zeros([1])
-    for line in open('TLE_Data.txt'):
+    for line in open('Flock2e_TLE_Data.txt'):
         if line.startswith('1'):
             continue
         else:

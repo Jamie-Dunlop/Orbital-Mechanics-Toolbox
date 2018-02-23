@@ -49,13 +49,13 @@ t = np.linspace(Main.t0,Main.tf,n)
 
 #Force Model including gravity and drag
 def Accel(t,R,V):
-    if t > Main.tf/2:
-        Area = Main.AreaH
-    else:
-        Area = Main.Area
+    # if t > Main.tf/2:
+    #     Area = Main.AreaH
+    # else:
+    #     Area = Main.Area
     Gravity = ((-Constants.mu) * (R)) / np.linalg.norm(R) ** 3 #monopole gravity model?
-    Drag = - (0.5 * Main.DensityModel(np.linalg.norm(R))*np.linalg.norm(V) * Area * Main.Cd*V) / Main.mass
-    return Gravity
+    Drag = - (0.5 * Main.DensityModel(np.linalg.norm(R))*np.linalg.norm(V) * Main.Area * Main.Cd*V) / Main.mass
+    return Gravity + Drag
 
 #Gets position and velocity from state vector and calculates acceleration from Accel
 def Orbit(t, state):
