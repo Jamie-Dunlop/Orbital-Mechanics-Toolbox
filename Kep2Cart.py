@@ -17,7 +17,7 @@ def kepler():
     # ax = fig.gca(projection='3d')
 
     def rad(X):
-        return ((X * math.pi) / 180)
+        return (list((i * math.pi) / 180 for i in X))
 
     def deg(X):
         return ((X / math.pi) * 180)
@@ -28,94 +28,96 @@ def kepler():
     omega = rad(Main.omega)
     RAAN = rad(Main.RAAN)
 
-    mean_motion = ((Main.Mean_motion) * 2 * math.pi) / 86400 #rad/s
+    mean_motion = list((i * 2 * math.pi) / 86400 for i in Main.Mean_motion) #rad/s
 
-    a = (mu / mean_motion ** 2) ** (1/3)
+    a = list((mu / i ** 2) ** (1/3) for i in mean_motion)
 
     #Error tolerance
     etol = 1e-8
 
     #Period
-    T = math.pi * 2 * math.sqrt(a ** 3 / mu)
+    T = list(math.pi * 2 * math.sqrt(i ** 3 / mu) for i in a)
+    index = 0
+    for j in range(0,len(T)):
+        t = 0
+        step = 0.1
+        r_resultsx = []
+        r_resultsy = []
+        r_resultsz = []
+        vsat_resultsx = []
+        vsat_resultsy = []
+        vsat_resultsz = []
+        try:
+            while t <= T[index]:
 
-    t = 0
-    step = 0.1
-    r_resultsx = np.empty((0,1))
-    r_resultsy = np.empty((0,1))
-    r_resultsz = np.empty((0,1))
-    vsat_resultsx = np.empty((0,1))
-    vsat_resultsy = np.empty((0,1))
-    vsat_resultsz = np.empty((0,1))
-    try:
-        while t <= T:
+                #Mean anomaly
+                M = math.sqrt(mu/a[index]**3) * t
 
-            #Mean anomaly
-            M = math.sqrt(mu/a**3) * t
+                #Initial guess for Eccentric anomaly
+                if M < math.pi:
+                    E = M - e[index]/2
+                else:
+                    E = M + e[index]/2
 
-            #Initial guess for Eccentric anomaly
-            if M < math.pi:
-                E = M - e/2
-            else:
-                E = M + e/2
+                #Iterates Kepler's equation until error is less than tolerance
+                error = 1
+                try:
+                    while abs(error) > etol:
+                        error = (M - E + e[index] * math.sin(E))/ (1 - e[index]*math.cos(E))
+                        E = E + error
 
-            #Iterates Kepler's equation until error is less than tolerance
-            error = 1
-            try:
-                while abs(error) > etol:
-                    error = (M - E + e * math.sin(E))/ (1 - e*math.cos(E))
-                    E = E + error
+                except KeyboardInterrupt:
+                    print('interrupted!')
 
-            except KeyboardInterrupt:
-                print('interrupted!')
+                #True anomaly
+                V = 2 * math.atan(math.sqrt((1+e[index]) / (1-e[index]) ) * math.tan(E/2))
 
-            #True anomaly
-            V = 2 * math.atan(math.sqrt((1+e) / (1-e) ) * math.tan(E/2))
+                #Rotation matrix
 
-            #Rotation matrix
+                R11 = math.cos(omega[index]) * math.cos(RAAN[index]) - math.sin(omega[index]) * math.cos(i[index]) * math.sin (RAAN[index])
+                R21 = math.cos(omega[index]) * math.sin(RAAN[index]) + math.sin(omega[index]) * math.cos(i[index]) * math.cos(RAAN[index])
+                R31 = math.sin(omega[index]) * math.sin(i[index])
 
-            R11 = math.cos(omega) * math.cos(RAAN) - math.sin(omega) * math.cos(i) * math.sin (RAAN)
-            R21 = math.cos(omega) * math.sin(RAAN) + math.sin(omega) * math.cos(i) * math.cos(RAAN)
-            R31 = math.sin(omega) * math.sin(i)
+                R12=-math.sin(omega[index])*math.cos(RAAN[index])-math.cos(omega[index])*math.cos(i[index])*math.sin(RAAN[index]);
+                R22=-math.sin(omega[index])*math.sin(RAAN[index])+math.cos(omega[index])*math.cos(i[index])*math.cos(RAAN[index]);
+                R32=math.cos(omega[index])*math.sin(i[index]);
 
-            R12=-math.sin(omega)*math.cos(RAAN)-math.cos(omega)*math.cos(i)*math.sin(RAAN);
-            R22=-math.sin(omega)*math.sin(RAAN)+math.cos(omega)*math.cos(i)*math.cos(RAAN);
-            R32=math.cos(omega)*math.sin(i);
+                R13=math.sin(i[index])*math.sin(RAAN[index]);
+                R23=-math.sin(i[index])*math.cos(RAAN[index]);
+                R33=math.cos(i[index]);
 
-            R13=math.sin(i)*math.sin(RAAN);
-            R23=-math.sin(i)*math.cos(RAAN);
-            R33=math.cos(i);
+                if e[index]==1:
+                    p=2*a[index]
+                else:
+                    p = a[index]*(1-e[index]**2)
 
-            if e==1:
-                p=2*a
-            else:
-                p = a*(1-e**2)
+                #Radius
+                r=(p)/(1 + (e[index] * math.cos(V)))
+                xp=r*math.cos(V)
+                yp=r*math.sin(V)
+                wom_dot = math.sqrt(mu*p)/r**2
 
-            #Radius
-            r=(p)/(1 + (e * math.cos(V)))
-            xp=r*math.cos(V)
-            yp=r*math.sin(V)
-            wom_dot = math.sqrt(mu*p)/r**2
+                #velocity
+                r_dot = math.sqrt(mu / p) * e[index] * math.sin(V)
+                vxp=r_dot*math.cos(V)-r*math.sin(V)*wom_dot
+                vyp=r_dot*math.sin(V)+r*math.cos(V)*wom_dot
 
-            #velocity
-            r_dot = math.sqrt(mu / p) * e * math.sin(V)
-            vxp=r_dot*math.cos(V)-r*math.sin(V)*wom_dot
-            vyp=r_dot*math.sin(V)+r*math.cos(V)*wom_dot
+                t = t + step
 
-            t = t + step
+                r_resultsx.append(R11*xp+R12*yp)
+                r_resultsy.append(R21*xp+R22*yp)
+                r_resultsz.append(R31*xp+R32*yp)
 
-            r_resultsx = R11*xp+R12*yp
-            r_resultsy = R21*xp+R22*yp
-            r_resultsz = R31*xp+R32*yp
+                vsat_resultsx.append(R11*vxp+R12*vyp)
+                vsat_resultsy.append(R21*vxp+R22*vyp)
+                vsat_resultsz.append(R31*vxp+R32*vyp)
 
-            vsat_resultsx = R11*vxp+R12*vyp
-            vsat_resultsy = R21*vxp+R22*vyp
-            vsat_resultsz = R31*vxp+R32*vyp
+        except KeyboardInterrupt:
+            print('interrupted!')
 
-    except KeyboardInterrupt:
-        print('interrupted!')
-
-    print('r', r_resultsx, r_resultsy, r_resultsz)
-    print('v', vsat_resultsx, vsat_resultsy, vsat_resultsz)
+        print('r', r_resultsx, r_resultsy, r_resultsz)
+        print('v', vsat_resultsx, vsat_resultsy, vsat_resultsz)
+        index =+ 1
     return([r_resultsx, r_resultsy, r_resultsz],[ vsat_resultsx, vsat_resultsy, vsat_resultsz])
 
 r0 , rdot0 = kepler()

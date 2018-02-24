@@ -92,12 +92,14 @@ DensityModel = Density.Density1
 (e,i,omega,RAAN,Mean_motion,name) = OrbElm()
 
 print('e', e,i,omega,RAAN,Mean_motion,name)
-
 print('Name',name)
-import Kep2Cart
-r0 = Kep2Cart.r0
-rdot0 = Kep2Cart.rdot0
+
+import Kep2CartT
+print('r0',Kep2CartT.r0)
+for b in range (0,len(Kep2CartT.r0[0])):
+    r0 = Kep2CartT.r0
+    rdot0 = Kep2CartT.rdot0
 
 
-#Call the relevant scripts
-RK4Orbittest
+    #Call the relevant scripts
+    RK4Orbittest
