@@ -15,7 +15,8 @@ h = 10 #Time step
 t0 = 0  #Starting time seconds
 tf = 86400 #time or number of orbits
 #Satellite properties
-Area = 0.02    #Wetted area m^2
+Area = 0.037
+AreaL = 0.02    #Wetted area m^2
 AreaH = 0.195   #High wetted area m^2
 Cd = 2.147
 mass = 50  #Mass of Satellite
@@ -96,9 +97,10 @@ print('Name',name)
 
 import Kep2CartT
 print('r0',Kep2CartT.r0)
+
 for b in range (0,len(Kep2CartT.r0[0])):
-    r0 = Kep2CartT.r0
-    rdot0 = Kep2CartT.rdot0
+    r0 = [Kep2CartT.r0[b][0],Kep2CartT.r0[b][1],Kep2CartT.r0[b][2]]
+    rdot0 = Kep2CartT.rdot0[b]
 
 
     #Call the relevant scripts
