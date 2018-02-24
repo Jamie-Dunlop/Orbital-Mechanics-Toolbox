@@ -54,7 +54,7 @@ def Accel(t,R,V):
     # else:
     #     Area = Main.Area
     Gravity = ((-Constants.mu) * (R)) / np.linalg.norm(R) ** 3 #monopole gravity model?
-    Drag = - (0.5 * Main.DensityModel(np.linalg.norm(R))*np.linalg.norm(V) * Main.Area * Main.Cd*V) / Main.mass
+    Drag = - (0.5 * Main.DensityModel(np.linalg.norm(R))*np.linalg.norm(V) * Main.AreaH * Main.Cd*V) / Main.mass
     return Gravity + Drag
 
 #Gets position and velocity from state vector and calculates acceleration from Accel

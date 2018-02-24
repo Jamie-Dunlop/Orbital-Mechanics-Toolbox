@@ -11,22 +11,22 @@ import Density
 import csv
 
 #Integration properties
-h = 1 #Time step
+h = 10 #Time step
 t0 = 0  #Starting time seconds
-tf = 10800 #time or number of orbits
+tf = 86400 #time or number of orbits
 #Satellite properties
-Area = 0.01    #Wetted area m^2
-AreaH = 0.21   #High wetted area m^2
+Area = 0.02    #Wetted area m^2
+AreaH = 0.195   #High wetted area m^2
 Cd = 2.147
-mass = 5  #Mass of Satellite
+mass = 50  #Mass of Satellite
 #Position and velocity
-# def StateVec():
-#     # r0 = np.array([3169751.48119611, 5583111.16079282, -41650245.77267506]) #m
-#     r0 = np.array([Constants.Geo, 0, 0])
-#     # rdot0 = np.array([-3058.91916149, 257.54617660, -200.43184936]) #m/s
-#     rdot0 = np.array([0, math.sqrt(Constants.mu / np.linalg.norm(r0)), 0])
-#     name = 'Satellite'
-#     return (r0,rdot0,name)
+def StateVec():
+    # r0 = np.array([3169751.48119611, 5583111.16079282, -41650245.77267506]) #m
+    r0 = np.array([Constants.Rearth+400000, 0, 0])
+    # rdot0 = np.array([-3058.91916149, 257.54617660, -200.43184936]) #m/s
+    rdot0 = np.array([0, math.sqrt(Constants.mu / np.linalg.norm(r0)), 0])
+    name = 'Satellite'
+    return (r0,rdot0,name)
 
 with open('Flock2e_TLE_Data.txt') as inf1:
     reader = csv.reader(inf1,delimiter=' ')
@@ -38,28 +38,26 @@ with open('NORAD_Satellite_Codes.txt') as inf2:
 
 #Orbital elements
 def OrbElm():
+    e = []
+    i = []
+    omega = []
+    RAAN = []
+    Mean_motion = []
+    Norad = []
+    name = []
     for b in range (1,9):
         linenum1 = (2*b-1)
-        e = np.zeros([8])
-        i = np.zeros([8])
-        omega = np.zeros([8])
-        RAAN = np.zeros([8])
-        Mean_motion = np.zeros([8])
-        Norad = np.zeros([8])
-
-        e[b-1] = float(second_col[4][linenum1])/10000000
-        print('eeee', e[b-1])
-        i[b-1] = float(second_col[2][linenum1]) #degrees
-        omega[b-1] = float(second_col[5][linenum1]) #degrees
-        RAAN[b-1] = float(second_col[3][linenum1]) #degrees
-        Mean_motion[b-1] = float(second_col[7][linenum1]) #revolutions per day
-        Norad[b-1] = second_col[1][linenum1] #NORAD ID number of Satellite
-
+        e.append(float(second_col[4][linenum1])/10000000)
+        i.append(float(second_col[2][linenum1])) #degrees
+        omega.append(float(second_col[5][linenum1])) #degrees
+        RAAN.append(float(second_col[3][linenum1])) #degrees
+        Mean_motion.append(float(second_col[7][linenum1])) #revolutions per day
+        Norad.append(second_col[1][linenum1]) #NORAD ID number of Satellite
         linenum2 = 0
         for line in open('NORAD_Satellite_Codes.txt'):
             linenum2 = linenum2
-            if str(int(Norad[b-1])) in line:
-                name = list(col[1])[linenum2]
+            if str(int(Norad[b-1]))in line:
+                name.append(list(col[1])[linenum2])
             linenum2 += 1
     return (e,i,omega,RAAN,Mean_motion,name)
 
@@ -93,7 +91,7 @@ DensityModel = Density.Density1
 # (r0,rdot0,name) = StateVec()
 (e,i,omega,RAAN,Mean_motion,name) = OrbElm()
 
-print('e', e)
+print('e', e,i,omega,RAAN,Mean_motion,name)
 
 print('Name',name)
 import Kep2Cart
