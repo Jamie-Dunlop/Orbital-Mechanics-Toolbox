@@ -19,7 +19,7 @@ Area = 0.037
 AreaL = 0.02    #Wetted area m^2
 AreaH = 0.195   #High wetted area m^2
 Cd = 2.147
-mass = 50  #Mass of Satellite
+mass = 5  #Mass of Satellite
 #Position and velocity
 def StateVec():
     # r0 = np.array([3169751.48119611, 5583111.16079282, -41650245.77267506]) #m
@@ -37,6 +37,7 @@ with open('NORAD_Satellite_Codes.txt') as inf2:
     reader = csv.reader(inf2,delimiter=',')
     col = list(zip(*reader))
 
+#### Multiple Sats######
 #Orbital elements
 def OrbElm():
     e = []
@@ -45,8 +46,8 @@ def OrbElm():
     RAAN = []
     Mean_motion = []
     Norad = []
-    name = []
-    for b in range (1,9):
+    names = []
+    for b in range (1,2):
         linenum1 = (2*b-1)
         e.append(float(second_col[4][linenum1])/10000000)
         i.append(float(second_col[2][linenum1])) #degrees
@@ -58,50 +59,68 @@ def OrbElm():
         for line in open('NORAD_Satellite_Codes.txt'):
             linenum2 = linenum2
             if str(int(Norad[b-1]))in line:
-                name.append(list(col[1])[linenum2])
+                names.append(list(col[1])[linenum2])
             linenum2 += 1
-    return (e,i,omega,RAAN,Mean_motion,name)
+    return (e,i,omega,RAAN,Mean_motion,names)
 
-    # def OrbElm():
-    #     # for line in open('TLE_Data.txt'):
-    #     #     if line.startswith('1'):
-    #     #         return line
-    #     #     else:
-    #     #         print(list(second_col[4]))
-    #         e = float(second_col[4][0])/10000000
-    #         print(e)
-    #         i = float(second_col[2][0]) #degrees
-    #         omega = float(second_col[5][0]) #degrees
-    #         RAAN = float(second_col[3][0]) #degrees
-    #         Mean_motion = float(second_col[7][0]) #revolutions per day
-    #         Norad = second_col[1][0] #NORAD ID number of Satellite
-    #         linenum = 0
-    #         for line in open('NORAD_Satellite_Codes.txt'):
-    #             linenum = linenum
-    #             if Norad in line:
-    #                 name = list(col[1])[linenum]
-    #             linenum +=1
-    #         return (e,i,omega,RAAN,Mean_motion,name)
+##### Single Sat#########
+# def OrbElm():
+#     # for line in open('Flock2e_TLE_Data.txt'):
+#     #     if line.startswith('1'):
+#     #         return line
+#     #     else:
+#     #         print(list(second_col[4]))
+#         e = float(second_col[4][1])/10000000
+#         print(e)
+#         i = float(second_col[2][1]) #degrees
+#         omega = float(second_col[5][1]) #degrees
+#         RAAN = float(second_col[3][1]) #degrees
+#         Mean_motion = float(second_col[7][1]) #revolutions per day
+#         Norad = second_col[1][1] #NORAD ID number of Satellite
+#         linenum = 0
+#         for line in open('NORAD_Satellite_Codes.txt'):
+#             linenum = linenum
+#             if Norad in line:
+#                 name = list(col[1])[linenum]
+#             linenum +=1
+#         return (e,i,omega,RAAN,Mean_motion,name)
+################################################
 
-    # Selection of density model to be used
-    # Density1 = US Model       Density2 =
-
+# Selection of density model to be used
+# Density1 = US Model       Density2 =
 DensityModel = Density.Density1
 
 # Obtain State Vectors for Satellite
 # (r0,rdot0,name) = StateVec()
-(e,i,omega,RAAN,Mean_motion,name) = OrbElm()
 
-print('e', e,i,omega,RAAN,Mean_motion,name)
-print('Name',name)
+######Single########
+# (e,i,omega,RAAN,Mean_motion,name) = OrbElm()
+#
+# print('e', e,i,omega,RAAN,Mean_motion,name)
+# import Kep2Cart
+# r0 = Kep2Cart.r0
+# rdot0 = Kep2Cart.rdot0
+#########################
 
+######Multi########
+(e,i,omega,RAAN,Mean_motion,names) = OrbElm()
+
+print('e', e,i,omega,RAAN,Mean_motion,names)
 import Kep2CartT
-print('r0',Kep2CartT.r0)
-
 for b in range (0,len(Kep2CartT.r0[0])):
-    r0 = [Kep2CartT.r0[b][0],Kep2CartT.r0[b][1],Kep2CartT.r0[b][2]]
-    rdot0 = Kep2CartT.rdot0[b]
+    r0temp = np.array([Kep2CartT.r0[0][b],Kep2CartT.r0[1][b],Kep2CartT.r0[2][b]]).tolist() #arrays to lists
+    r0 = [y for x in r0temp for y in x] #List in a list to list
+    print('r0',r0)
+    print('r0 mod',np.linalg.norm(r0)-Constants.Rearth)
 
+    rdot0temp = np.array([Kep2CartT.rdot0[0][b],Kep2CartT.rdot0[0][b],Kep2CartT.rdot0[0][b]]).tolist()
+    rdot0 = [y for x in rdot0temp for y in x]
+    print('rdot0',rdot0)
+    print('rdot0 mod',np.linalg.norm(rdot0))
 
-    #Call the relevant scripts
-    RK4Orbittest
+    name = names[b]
+    print(name)
+##################################
+
+## Call the relevant scripts
+RK4Orbittest
