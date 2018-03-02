@@ -4,12 +4,13 @@
 #in order to forecast position and velocity vectors
 
 
-def kepler():
+def kepler(e,i,omega,RAAN,Mean_motion):
     import math
     import numpy as np
     import matplotlib.pyplot as plt
     import Constants
-    import Main
+    # from Main import e,i,omega,RAAN,Mean_motion
+    import sys
     from mpl_toolkits.mplot3d import Axes3D
     from matplotlib.patches import Ellipse, Circle
 
@@ -23,12 +24,12 @@ def kepler():
         return ((X / math.pi) * 180)
 
     mu = Constants.mu
-    e = Main.e
-    i = rad(Main.i)
-    omega = rad(Main.omega)
-    RAAN = rad(Main.RAAN)
+    e = e
+    i = rad(i)
+    omega = rad(omega)
+    RAAN = rad(RAAN)
 
-    mean_motion = list((i * 2 * math.pi) / 86400 for i in Main.Mean_motion) #rad/s
+    mean_motion = list((i * 2 * math.pi) / 86400 for i in Mean_motion) #rad/s
 
     a = list((mu / i ** 2) ** (1/3) for i in mean_motion)
 
@@ -44,6 +45,7 @@ def kepler():
     vsat_resultsx = np.empty((len(T),1))
     vsat_resultsy = np.empty((len(T),1))
     vsat_resultsz = np.empty((len(T),1))
+    V = np.empty((len(T),1))
     for j in range(0,len(T)):
         print('index',index)
         t = 0
@@ -71,7 +73,7 @@ def kepler():
                     print('interrupted!')
 
                 #True anomaly
-                V = 2 * math.atan(math.sqrt((1+e[index]) / (1-e[index]) ) * math.tan(E/2))
+                V[index] = 2 * math.atan(math.sqrt((1+e[index]) / (1-e[index]) ) * math.tan(E/2))
 
                 #Rotation matrix
 
@@ -93,15 +95,15 @@ def kepler():
                     p = a[index]*(1-e[index]**2)
 
                 #Radius
-                r=(p)/(1 + (e[index] * math.cos(V)))
-                xp=r*math.cos(V)
-                yp=r*math.sin(V)
+                r=(p)/(1 + (e[index] * math.cos(V[index])))
+                xp=r*math.cos(V[index])
+                yp=r*math.sin(V[index])
                 wom_dot = math.sqrt(mu*p)/r**2
 
                 #velocity
-                r_dot = math.sqrt(mu / p) * e[index] * math.sin(V)
-                vxp=r_dot*math.cos(V)-r*math.sin(V)*wom_dot
-                vyp=r_dot*math.sin(V)+r*math.cos(V)*wom_dot
+                r_dot = math.sqrt(mu / p) * e[index] * math.sin(V[index])
+                vxp=r_dot*math.cos(V[index])-r*math.sin(V[index])*wom_dot
+                vyp=r_dot*math.sin(V[index])+r*math.cos(V[index])*wom_dot
 
                 t = t + step
 
@@ -117,11 +119,12 @@ def kepler():
             print('interrupted!')
 
         index += 1
+        # sys.exit("Error message")
     print('r', r_resultsx, r_resultsy, r_resultsz)
     print('v', vsat_resultsx, vsat_resultsy, vsat_resultsz)
-    return([r_resultsx, r_resultsy, r_resultsz],[ vsat_resultsx, vsat_resultsy, vsat_resultsz])
+    return([r_resultsx, r_resultsy, r_resultsz],[ vsat_resultsx, vsat_resultsy, vsat_resultsz],V)
 
-r0 , rdot0 = kepler()
+# r0 , rdot0, V = kepler()
 
 # #Plot Earth sphere
 # u = np.linspace(0, 2 * np.pi, 100)

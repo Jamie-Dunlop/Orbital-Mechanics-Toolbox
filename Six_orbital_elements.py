@@ -22,7 +22,6 @@ def mod(vector):
 
 
 def orb_elems(r, v, mu):
-
     #Orbital energy
     epsilon = 0.5 * mod(v) ** 2 - Constants.mu/mod(r)
     #Semi-major axis
@@ -58,7 +57,7 @@ def orb_elems(r, v, mu):
     #True anomaly
     V = math.acos((dot(e_v, r))/(e * mod(r)))
     if dot(r, v) < 0:
-       V = 2 * math.pi - V
+       V = (2 * math.pi) - V
 
     # print("Orbit energy: ", round(epsilon, 4))
     # print("Angular Momentum vector: ", H)
@@ -94,7 +93,7 @@ def orb_elems(r, v, mu):
 # v_tan, v_rad, r_x, r_y = vectors(Vel, height, gamma)
 
 #orb_elems([r_x, r_y, -1.405667119e-4], [v_tan, v_rad, -4.05058737e-5], 3.986004e14)
-orb_elems([-10515.45, -5235.37, 49.17], [-2.10305, -4.18146, -5.563290], Constants.mu) #Molniya orbit
+# orb_elems([-10515.45, -5235.37, 49.17], [-2.10305, -4.18146, -5.563290], Constants.mu) #Molniya orbit
 # r = [4.1852e7, 6.2778e7, 10.463e7]
 # v = [2.5936e4, 5.1872e4, 0]
 # mu = 1.40812

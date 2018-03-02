@@ -1,10 +1,13 @@
 #Jamie Dunlop and Co 2/2/2018
 #Main Simulation Script
 import time
+import subprocess
+import sys
 import Constants
 import RK4Orbittest
 # import RK4OrbEle
 import numpy as np
+import matplotlib.pyplot as plt
 import math
 # import Six_orbital_elements
 import Density
@@ -47,7 +50,7 @@ def OrbElm():
     Mean_motion = []
     Norad = []
     names = []
-    for b in range (1,2):
+    for b in range (1,3):
         linenum1 = (2*b-1)
         e.append(float(second_col[4][linenum1])/10000000)
         i.append(float(second_col[2][linenum1])) #degrees
@@ -64,7 +67,7 @@ def OrbElm():
     return (e,i,omega,RAAN,Mean_motion,names)
 
 ##### Single Sat#########
-# def OrbElm():
+# def SingleOrbElm():
 #     # for line in open('Flock2e_TLE_Data.txt'):
 #     #     if line.startswith('1'):
 #     #         return line
@@ -104,23 +107,36 @@ DensityModel = Density.Density1
 
 ######Multi########
 (e,i,omega,RAAN,Mean_motion,names) = OrbElm()
-
+TrueAnomaly = []
 print('e', e,i,omega,RAAN,Mean_motion,names)
 import Kep2CartT
-for b in range (0,len(Kep2CartT.r0[0])):
-    r0temp = np.array([Kep2CartT.r0[0][b],Kep2CartT.r0[1][b],Kep2CartT.r0[2][b]]).tolist() #arrays to lists
+r0vec,rdot0vec,V = Kep2CartT.kepler(e,i,omega,RAAN,Mean_motion)
+for b in range (0,len(r0vec[0])):
+    r0temp = np.array([r0vec[0][b],r0vec[1][b],r0vec[2][b]]).tolist() #arrays to lists
     r0 = [y for x in r0temp for y in x] #List in a list to list
     print('r0',r0)
     print('r0 mod',np.linalg.norm(r0)-Constants.Rearth)
 
-    rdot0temp = np.array([Kep2CartT.rdot0[0][b],Kep2CartT.rdot0[0][b],Kep2CartT.rdot0[0][b]]).tolist()
+    rdot0temp = np.array([rdot0vec[0][b],rdot0vec[1][b],rdot0vec[2][b]]).tolist()
     rdot0 = [y for x in rdot0temp for y in x]
     print('rdot0',rdot0)
     print('rdot0 mod',np.linalg.norm(rdot0))
 
     name = names[b]
     print(name)
+
 ##################################
 
 ## Call the relevant scripts
-RK4Orbittest
+
+    (V,t) = RK4Orbittest.wholefile(r0,rdot0,t0,h,tf,name,Area,AreaH,AreaL,Cd,mass,DensityModel,b)
+    TrueAnomaly.append(V) #True anomaly at each step for every satellite run
+    print('V',TrueAnomaly[b])
+
+plt.plot(t,TrueAnomaly[0],'r-')
+plt.plot(t,TrueAnomaly[1],'b-')
+plt.xlabel("Time (s)")
+plt.ylabel("True Anomaly (radians)")
+plt.title("True Anomaly vs Time of {} satellies".format(len(r0vec[0])))
+plt.grid()
+plt.show()
