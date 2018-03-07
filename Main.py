@@ -16,7 +16,7 @@ import csv
 #Integration properties
 h = 10 #Time step
 t0 = 0  #Starting time seconds
-tf = 86400 #time or number of orbits
+tf = 864000 #time or number of orbits
 #Satellite properties
 Area = 0.037
 AreaL = 0.02    #Wetted area m^2

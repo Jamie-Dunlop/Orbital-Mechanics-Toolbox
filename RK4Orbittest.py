@@ -95,7 +95,7 @@ def wholefile(r0,rdot0,t0,h,tf,name,Area,AreaH,AreaL,Cd,mass,DensityModel,b):
 
       #True Anomaly at every step from Six_orbital_elements
       a = orb_elems([x[j],y[j],z[j]], [xdot[j],ydot[j],zdot[j]], Constants.mu)
-      V[j] =  a[5]
+      V[j-1] =  a[5]
 
       if rmod[j] < Constants.Rearth:
           t = t[:j]
