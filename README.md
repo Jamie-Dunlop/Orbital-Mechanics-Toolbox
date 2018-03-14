@@ -1,9 +1,9 @@
 ## Contributors
 
-Jamie Dunlop
-Hollie Florence Jackson
-Christopher Lowther
-Anna Middleton
+- Jamie Dunlop
+- Hollie Florence Jackson
+- Christopher Lowther
+- Anna Middleton
 
 From September 2017 - April 2018
 
