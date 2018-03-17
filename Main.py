@@ -1,6 +1,7 @@
 #Jamie Dunlop and Co 2/2/2018
 #Main Simulation Script
 import time
+import os
 import subprocess
 import sys
 import Constants
@@ -12,17 +13,24 @@ import math
 # import Six_orbital_elements
 import Density
 import csv
+os.system('CLS')
 
-#Integration properties
-h = 10 #Time step
-t0 = 0  #Starting time seconds
-tf = 864000 #time or number of orbits
+#Initialisation of defining satallite properties and simulation times
+h = 10      #Time step (seconds)
+t0 = 0      #Starting time (seconds)
+tf = 86400 #Finish time (seconds)
 #Satellite properties
-Area = 0.037
-AreaL = 0.02    #Wetted area m^2
-AreaH = 0.195   #High wetted area m^2
-Cd = 2.147
-mass = 5  #Mass of Satellite
+Area = 0.037    #Nominal area m^2
+AreaL = 0.02    #Low area m^2
+AreaH = 0.195   #High area m^2
+Cd = 2.147      #Drag coefficient
+mass = 5        #Mass of Satellite
+
+# Selection of density model to be used
+DensityModel = Density.Density1 #US Standard Atmosphere
+
+############## Single Sat obtained from manually entered state vectors ##################
+
 #Position and velocity
 def StateVec():
     # r0 = np.array([3169751.48119611, 5583111.16079282, -41650245.77267506]) #m
@@ -32,17 +40,21 @@ def StateVec():
     name = 'Satellite'
     return (r0,rdot0,name)
 
+############## Multiple Sats obtained from TLE Data ##################
+
+#Opens Flock2e_TLE_Data.txt and transfers data to 'second_col' variable. File then closed.
 with open('Flock2e_TLE_Data.txt') as inf1:
     reader = csv.reader(inf1,delimiter=' ')
     second_col = list(zip(*reader))
 
+#Opens NORAD_Satellite_Codes.txt and transfers data to 'col' variable. File then closed.
 with open('NORAD_Satellite_Codes.txt') as inf2:
     reader = csv.reader(inf2,delimiter=',')
     col = list(zip(*reader))
 
-#### Multiple Sats######
 #Orbital elements
 def OrbElm():
+    #Initialises empty lists for required elements
     e = []
     i = []
     omega = []
@@ -50,6 +62,7 @@ def OrbElm():
     Mean_motion = []
     Norad = []
     names = []
+    # Fetches orbital elements from Flock2e_TLE_Data.txt for the first (Max(range)-1) satellites
     for b in range (1,3):
         linenum1 = (2*b-1)
         e.append(float(second_col[4][linenum1])/10000000)
@@ -59,6 +72,8 @@ def OrbElm():
         Mean_motion.append(float(second_col[7][linenum1])) #revolutions per day
         Norad.append(second_col[1][linenum1]) #NORAD ID number of Satellite
         linenum2 = 0
+        # Fetches the name of 2019 satellites from NORAD_Satellite_Codes.txt and appends to list. Later used to identify name
+        # of chosen satellites in above loop from the NORAD number obtained from TLE number.
         for line in open('NORAD_Satellite_Codes.txt'):
             linenum2 = linenum2
             if str(int(Norad[b-1]))in line:
@@ -66,7 +81,7 @@ def OrbElm():
             linenum2 += 1
     return (e,i,omega,RAAN,Mean_motion,names)
 
-##### Single Sat#########
+############## Single Sat ##################
 # def SingleOrbElm():
 #     # for line in open('Flock2e_TLE_Data.txt'):
 #     #     if line.startswith('1'):
@@ -89,10 +104,6 @@ def OrbElm():
 #         return (e,i,omega,RAAN,Mean_motion,name)
 ################################################
 
-# Selection of density model to be used
-# Density1 = US Model       Density2 =
-DensityModel = Density.Density1
-
 # Obtain State Vectors for Satellite
 # (r0,rdot0,name) = StateVec()
 
@@ -108,7 +119,7 @@ DensityModel = Density.Density1
 ######Multi########
 (e,i,omega,RAAN,Mean_motion,names) = OrbElm()
 TrueAnomaly = []
-print('e', e,i,omega,RAAN,Mean_motion,names)
+print('Please standby, running simulations for the following: {}'.format(names))
 import Kep2CartT
 r0vec,rdot0vec,V = Kep2CartT.kepler(e,i,omega,RAAN,Mean_motion)
 for b in range (0,len(r0vec[0])):
@@ -123,8 +134,7 @@ for b in range (0,len(r0vec[0])):
     print('rdot0 mod',np.linalg.norm(rdot0))
 
     name = names[b]
-    print(name)
-
+    
 ##################################
 
 ## Call the relevant scripts

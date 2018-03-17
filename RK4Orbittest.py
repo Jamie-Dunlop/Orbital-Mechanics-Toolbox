@@ -47,7 +47,7 @@ def wholefile(r0,rdot0,t0,h,tf,name,Area,AreaH,AreaL,Cd,mass,DensityModel,b):
 
   No_of_orbits = int(tf/T)
   limit = 7e6 #Graph limits for plotting
-  print('Period', T)
+  print('{} has an inital period of {}'.format(name,T))
   x= np.zeros([n])
   y= np.zeros([n])
   z= np.zeros([n])
@@ -150,7 +150,7 @@ def wholefile(r0,rdot0,t0,h,tf,name,Area,AreaH,AreaL,Cd,mass,DensityModel,b):
   # print ('r', r)
   # print('rdot', rdot)
   # print (x, y)
-  print('name',name)
+  print('Displaying plots for {}. Please close all graphs to continue to next step.'.format(name))
   # Plot Orbit
   plt.figure(1)
   ax.plot(x, y, z, color = 'r')
@@ -171,7 +171,7 @@ def wholefile(r0,rdot0,t0,h,tf,name,Area,AreaH,AreaL,Cd,mass,DensityModel,b):
   ax.set_xlim(-limit, limit)
   ax.set_ylim(-limit, limit)
   ax.set_zlim(-limit, limit)
-  # ax.set_aspect('equal')
+
 
   plt.figure(2)
   plt.plot(t,(rmod-Constants.Rearth)/1000)

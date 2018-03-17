@@ -47,7 +47,7 @@ def kepler(e,i,omega,RAAN,Mean_motion):
     vsat_resultsz = np.empty((len(T),1))
     V = np.empty((len(T),1))
     for j in range(0,len(T)):
-        print('index',index)
+        print('Simulation {} complete...'.format(index+1))
         t = 0
         step = 0.1
         try:
@@ -120,8 +120,8 @@ def kepler(e,i,omega,RAAN,Mean_motion):
 
         index += 1
         # sys.exit("Error message")
-    print('r', r_resultsx, r_resultsy, r_resultsz)
-    print('v', vsat_resultsx, vsat_resultsy, vsat_resultsz)
+    # print('r', r_resultsx, r_resultsy, r_resultsz)
+    # print('v', vsat_resultsx, vsat_resultsy, vsat_resultsz)
     return([r_resultsx, r_resultsy, r_resultsz],[ vsat_resultsx, vsat_resultsy, vsat_resultsz],V)
 
 # r0 , rdot0, V = kepler()
