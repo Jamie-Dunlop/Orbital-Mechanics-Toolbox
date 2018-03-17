@@ -12,8 +12,13 @@ from Six_orbital_elements import dot, cross, mod, orb_elems
 
 #Force Model including gravity and drag
 def Accel(t,R,V,Area,AreaH,AreaL,Cd,mass,DensityModel,b,tf):
-    if b == 1:
-        if t > tf/4:
+    if b == 0:
+        if t > 4*tf/8 and t < 5*tf/8:
+            Area = AreaH
+        else:
+            Area = Area
+    elif b == 1:
+        if t > 5*tf/8 and t < 6*tf/8:
             Area = AreaH
         else:
             Area = Area
@@ -46,7 +51,7 @@ def wholefile(r0,rdot0,t0,h,tf,name,Area,AreaH,AreaL,Cd,mass,DensityModel,b):
   T = 2 * math.pi * math.sqrt (np.linalg.norm(r0) ** 3 / Constants.mu)
 
   No_of_orbits = int(tf/T)
-  limit = 7e6 #Graph limits for plotting
+  limit = 7e3 #Graph limits for plotting
   print('{} has an inital period of {}'.format(name,T))
   x= np.zeros([n])
   y= np.zeros([n])
@@ -153,10 +158,13 @@ def wholefile(r0,rdot0,t0,h,tf,name,Area,AreaH,AreaL,Cd,mass,DensityModel,b):
   print('Displaying plots for {}. Please close all graphs to continue to next step.'.format(name))
   # Plot Orbit
   plt.figure(1)
-  ax.plot(x, y, z, color = 'r')
-  ax.set_xlabel("X-position (m)")
-  ax.set_ylabel("Y-position (m)")
-  ax.set_zlabel("Z-position (m)")
+  ax.plot(x/1000, y/1000, z/1000, color = 'r')
+  ax.set_xlabel("X-position (km)", labelpad=20)
+  ax.set_ylabel("Y-position (km)", labelpad=20)
+  ax.set_zlabel("Z-position (km)", labelpad=20)
+  ax.tick_params(axis='x', pad=5)
+  ax.tick_params(axis='y', pad=5)
+  ax.tick_params(axis='z', pad=5)
   plt.title("RK4 - Orbit of {}".format(name))
   plt.grid()
 
@@ -166,7 +174,7 @@ def wholefile(r0,rdot0,t0,h,tf,name,Area,AreaH,AreaL,Cd,mass,DensityModel,b):
   xe = Constants.Rearth * np.outer(np.cos(u), np.sin(vearth))
   ye = Constants.Rearth * np.outer(np.sin(u), np.sin(vearth))
   ze = Constants.Rearth * np.outer(np.ones(np.size(u)), np.cos(vearth))
-  ax.plot_surface(xe, ye, ze, color='b')
+  ax.plot_surface(xe/1000, ye/1000, ze/1000, color='b')
 
   ax.set_xlim(-limit, limit)
   ax.set_ylim(-limit, limit)
@@ -211,4 +219,4 @@ def wholefile(r0,rdot0,t0,h,tf,name,Area,AreaH,AreaL,Cd,mass,DensityModel,b):
   # ax.set_zlim(mid_z - max_range, mid_z + max_range)
 
   plt.show()
-  return V,t
+  return V,t,r

@@ -16,7 +16,7 @@ import csv
 os.system('CLS')
 
 #Initialisation of defining satallite properties and simulation times
-h = 10      #Time step (seconds)
+h = 1      #Time step (seconds)
 t0 = 0      #Starting time (seconds)
 tf = 86400 #Finish time (seconds)
 #Satellite properties
@@ -82,43 +82,54 @@ def OrbElm():
     return (e,i,omega,RAAN,Mean_motion,names)
 
 ############## Single Sat ##################
-# def SingleOrbElm():
-#     # for line in open('Flock2e_TLE_Data.txt'):
-#     #     if line.startswith('1'):
-#     #         return line
-#     #     else:
-#     #         print(list(second_col[4]))
-#         e = float(second_col[4][1])/10000000
-#         print(e)
-#         i = float(second_col[2][1]) #degrees
-#         omega = float(second_col[5][1]) #degrees
-#         RAAN = float(second_col[3][1]) #degrees
-#         Mean_motion = float(second_col[7][1]) #revolutions per day
-#         Norad = second_col[1][1] #NORAD ID number of Satellite
-#         linenum = 0
-#         for line in open('NORAD_Satellite_Codes.txt'):
-#             linenum = linenum
-#             if Norad in line:
-#                 name = list(col[1])[linenum]
-#             linenum +=1
-#         return (e,i,omega,RAAN,Mean_motion,name)
+def SingleOrbElm():
+    # for line in open('Flock2e_TLE_Data.txt'):
+    #     if line.startswith('1'):
+    #         return line
+    #     else:
+    #         print(list(second_col[4]))
+        e = float(second_col[4][1])/10000000
+        i = float(second_col[2][1]) #degrees
+        omega = float(second_col[5][1]) #degrees
+        RAAN = float(second_col[3][1]) #degrees
+        Mean_motion = float(second_col[7][1]) #revolutions per day
+        Norad = second_col[1][1] #NORAD ID number of Satellite
+        linenum = 0
+        for line in open('NORAD_Satellite_Codes.txt'):
+            linenum = linenum
+            if Norad in line:
+                name = list(col[1])[linenum]
+            linenum +=1
+        return (e,i,omega,RAAN,Mean_motion,name)
 ################################################
 
 # Obtain State Vectors for Satellite
 # (r0,rdot0,name) = StateVec()
+# (V,t,r) = RK4Orbittest.wholefile(r0,rdot0,t0,h,tf,name,Area,AreaH,AreaL,Cd,mass,DensityModel,0)
+
 
 ######Single########
-# (e,i,omega,RAAN,Mean_motion,name) = OrbElm()
+# (e,i,omega,RAAN,Mean_motion,name) = SingleOrbElm()
 #
-# print('e', e,i,omega,RAAN,Mean_motion,name)
-# import Kep2Cart
-# r0 = Kep2Cart.r0
-# rdot0 = Kep2Cart.rdot0
+#print('Please standby, running simulations for the following: {}'.format(names))
+#import Kep2CartT
+#r0vec,rdot0vec,V = Kep2CartT.kepler(e,i,omega,RAAN,Mean_motion)
+##r0 = np.array([r0vec[0],r0vec[1],r0vec[2]).tolist() #arrays to lists
+#print('r0',r0)
+#print('r0 mod',np.linalg.norm(r0)-Constants.Rearth)
+#
+#rdot0 = np.array([rdot0vec[0],rdot0vec[1],rdot0vec[2]).tolist()
+##rdot0 = [y for x in rdot0temp for y in x]
+#print('rdot0',rdot0)
+#print('rdot0 mod',np.linalg.norm(rdot0))
+
+#(V,t,r) = RK4Orbittest.wholefile(r0,rdot0,t0,h,tf,name,Area,AreaH,AreaL,Cd,mass,DensityModel,0)
 #########################
 
 ######Multi########
 (e,i,omega,RAAN,Mean_motion,names) = OrbElm()
 TrueAnomaly = []
+PosVecs = []
 print('Please standby, running simulations for the following: {}'.format(names))
 import Kep2CartT
 r0vec,rdot0vec,V = Kep2CartT.kepler(e,i,omega,RAAN,Mean_motion)
@@ -134,19 +145,39 @@ for b in range (0,len(r0vec[0])):
     print('rdot0 mod',np.linalg.norm(rdot0))
 
     name = names[b]
-    
+
 ##################################
 
 ## Call the relevant scripts
 
-    (V,t) = RK4Orbittest.wholefile(r0,rdot0,t0,h,tf,name,Area,AreaH,AreaL,Cd,mass,DensityModel,b)
+    (V,t,r) = RK4Orbittest.wholefile(r0,rdot0,t0,h,tf,name,Area,AreaH,AreaL,Cd,mass,DensityModel,b)
     TrueAnomaly.append(V) #True anomaly at each step for every satellite run
-    print('V',TrueAnomaly[b])
+    PosVecs.append(r)
 
-plt.plot(t,TrueAnomaly[0],'r-')
-plt.plot(t,TrueAnomaly[1],'b-')
-plt.xlabel("Time (s)")
-plt.ylabel("True Anomaly (radians)")
-plt.title("True Anomaly vs Time of {} satellies".format(len(r0vec[0])))
+
+import Six_orbital_elements
+RelAng = []
+for b in range (0,len(PosVecs[0][0])):
+    # print('%.20f'%((Six_orbital_elements.dot([PosVecs[0][0][b],PosVecs[0][1][b],PosVecs[0][2][b]],[PosVecs[1][0][b],PosVecs[1][1][b],PosVecs[1][2][b]]))/
+    # (Six_orbital_elements.mod([PosVecs[0][0][b],PosVecs[0][1][b],PosVecs[0][2][b]])*Six_orbital_elements.mod([PosVecs[1][0][b],PosVecs[1][1][b],PosVecs[1][2][b]]))))
+    dotprod = (Six_orbital_elements.dot([PosVecs[0][0][b],PosVecs[0][1][b],PosVecs[0][2][b]],[PosVecs[1][0][b],PosVecs[1][1][b],PosVecs[1][2][b]]))
+    modmulti = (Six_orbital_elements.mod([PosVecs[0][0][b],PosVecs[0][1][b],PosVecs[0][2][b]])*Six_orbital_elements.mod([PosVecs[1][0][b],PosVecs[1][1][b],PosVecs[1][2][b]]))
+    if dotprod<modmulti:
+        RelAng.append(math.acos(dotprod/modmulti))
+    else:
+        RelAng.append(math.acos(modmulti/dotprod))
+    # print('Angle betweeen the satallites',DotProd)
+
+# plt.plot(t,TrueAnomaly[0],'r-')
+# plt.plot(t,TrueAnomaly[1],'b-')
+# plt.xlabel("Time (s)")
+# plt.ylabel("True Anomaly (radians)")
+# plt.title("True Anomaly vs Time of {} satellies".format(len(r0vec[0])))
+# plt.grid()
+# plt.show()
+
+plt.plot(t,RelAng)
+plt.xlabel('Time (s)')
+plt.ylabel('Angle Between Satellites (radians)')
 plt.grid()
 plt.show()
