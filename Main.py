@@ -157,6 +157,7 @@ for b in range (0,len(r0vec[0])):
 
 import Six_orbital_elements
 RelAng = []
+arclength = []
 for b in range (0,len(PosVecs[0][0])):
     # print('%.20f'%((Six_orbital_elements.dot([PosVecs[0][0][b],PosVecs[0][1][b],PosVecs[0][2][b]],[PosVecs[1][0][b],PosVecs[1][1][b],PosVecs[1][2][b]]))/
     # (Six_orbital_elements.mod([PosVecs[0][0][b],PosVecs[0][1][b],PosVecs[0][2][b]])*Six_orbital_elements.mod([PosVecs[1][0][b],PosVecs[1][1][b],PosVecs[1][2][b]]))))
@@ -166,7 +167,8 @@ for b in range (0,len(PosVecs[0][0])):
         RelAng.append(math.acos(dotprod/modmulti))
     else:
         RelAng.append(math.acos(modmulti/dotprod))
-    # print('Angle betweeen the satallites',DotProd)
+    arclength.append(RelAng[b]*Six_orbital_elements.mod([PosVecs[0][0][b],PosVecs[0][1][b],PosVecs[0][2][b]]))
+    
 
 # plt.plot(t,TrueAnomaly[0],'r-')
 # plt.plot(t,TrueAnomaly[1],'b-')
@@ -177,6 +179,12 @@ for b in range (0,len(PosVecs[0][0])):
 # plt.show()
 
 plt.plot(t,RelAng)
+plt.xlabel('Time (s)')
+plt.ylabel('Angle Between Satellites (radians)')
+plt.grid()
+plt.show()
+
+plt.plot(t,arclength)
 plt.xlabel('Time (s)')
 plt.ylabel('Angle Between Satellites (radians)')
 plt.grid()

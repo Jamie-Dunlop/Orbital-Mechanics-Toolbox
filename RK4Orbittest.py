@@ -12,13 +12,13 @@ from Six_orbital_elements import dot, cross, mod, orb_elems
 
 #Force Model including gravity and drag
 def Accel(t,R,V,Area,AreaH,AreaL,Cd,mass,DensityModel,b,tf):
-    if b == 0:
-        if t > 4*tf/8 and t < 5*tf/8:
-            Area = AreaH
-        else:
-            Area = Area
+    # if b == 0:
+    #     if t > 4*tf/8 and t < 5*tf/8:
+    #         Area = AreaH
+    #     else:
+    #         Area = Area
     elif b == 1:
-        if t > 5*tf/8 and t < 6*tf/8:
+        if t > 10 and t < 6*tf/8:
             Area = AreaH
         else:
             Area = Area
